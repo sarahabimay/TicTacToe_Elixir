@@ -40,15 +40,7 @@ defmodule BoardTest do
     row3 = ["O", "X", "O"]
     board = [row1, row2, row3]
     marks = ["X", "O"]
-    assert TTT.Board.game_over?(board, marks) == true
-  end
-
-  test "board split into rows" do
-    row1 = ["X", "O", "X"]
-    row2 = ["O", "X" ,"O"]
-    row3 = ["X", "8", "9" ]
-    board = [row1, row2, row3]
-    assert TTT.Board.chunk_board_into_rows(List.flatten(board)) == board
+    assert TTT.Board.game_over?(List.flatten(board), marks) == true
   end
 
   test "diagonal values are pulled out of board" do
@@ -56,8 +48,6 @@ defmodule BoardTest do
     row2 = ["O", "X" ,"O"]
     row3 = ["X", "8", "9" ]
     board = [row1, row2, row3]
-    board_with_index = [{row1, 0}, {row2, 1}, {row3, 2}]
-    reversed_board_with_index = [{row3, 0}, {row2, 1}, {row1, 2}]
     diag1 = ["X", "X", "9"]
     diag2 = ["X", "X", "X"]
     assert TTT.Board.diagonal_marks(board) == diag1 ++ diag2
@@ -66,19 +56,18 @@ defmodule BoardTest do
   test "it has a diagonal win" do
     row1 = ["X", "O", "X"]
     row2 = ["O", "X" ,"O"]
-    row3 = ["X", "8", "9" ]
-    board = [row1, row2, row3]
-    marks = ["X", "O"]
-    #assert TTT.Board.found_winner?(board, marks) == true
-    assert TTT.Board.diagonal_win?(List.flatten(board), marks) == true
-  end
-
-  test "it has another diagonal win" do
-    row1 = ["X", "O", "X"]
-    row2 = ["O", "X" ,"O"]
     row3 = ["7", "8", "X" ]
     board = [row1, row2, row3]
     marks = ["X", "O"]
     assert TTT.Board.diagonal_win?(List.flatten(board), marks) == true
+  end
+
+  test "it has found a diagonal win" do
+    row1 = ["X", "O", "X"]
+    row2 = ["O", "X" ,"O"]
+    row3 = ["X", "8", "9" ]
+    board = [row1, row2, row3]
+    marks = ["X", "O"]
+    assert TTT.Board.found_winner?(List.flatten(board), marks) == true
   end
 end

@@ -13,7 +13,16 @@ defmodule TTT.Board do
   end
 
   def game_over?(board, marks) do
-    remaining_spaces?(board, marks)
+    chunk_board_into_rows(board)
+    |> remaining_spaces?(marks)
+  end
+
+  def found_winner?(board, marks) do
+    column_win?(board, marks) || row_win?(board, marks) || diagonal_win?(board, marks)
+  end
+
+  defp column_win?(board, marks) do
+    false
   end
 
   def row_win?(board, marks) do
@@ -27,7 +36,7 @@ defmodule TTT.Board do
   end
 
   defp remaining_spaces?(board, marks) do
-    count_of_all_mark_moves(board, marks) < length board
+    count_of_all_mark_moves(board, marks) < length(board)
   end
 
   defp count_of_all_mark_moves(board, marks) do
