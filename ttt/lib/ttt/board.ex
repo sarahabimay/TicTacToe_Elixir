@@ -1,5 +1,4 @@
 defmodule TTT.Board do
-
   def empty_board(dimension) do
     Enum.to_list(1..dimension*dimension)
   end
@@ -14,27 +13,67 @@ defmodule TTT.Board do
   end
 
   def game_over?(board, marks) do
-    chunk_board_into_rows(board)
-    |> remaining_spaces?(marks)
+    not remaining_spaces?(board, marks)
   end
 
-  def found_winner?(board, marks) do
-    two_d_board = chunk_board_into_rows(board)
-    column_win?(two_d_board, marks) or row_win?(two_d_board, marks) or diagonal_win?(two_d_board, marks)
+  def winning_mark(board) do
+    winning_mark_in_row(board) <>
+     winning_mark_in_column(board) <>
+      winning_mark_in_diagonal(board)
   end
 
-  defp column_win?(board, marks) do
-    transpose(board)
-    |> row_win?(marks)
+  def found_winner?(board) do
+    Enum.any?(win_in_any_direction?(board), is_true?)
   end
 
-  defp row_win?(board, marks) do
-    Enum.any?(marks, fn(mark) -> row_win_for_mark?(mark, board) == true end)
+  defp win_in_any_direction?(board) do
+    [column_win?(board), row_win?(board), diagonal_win?(board)]
   end
 
-  defp diagonal_win?(board, marks) do
+  defp winning_mark_in_diagonal(board) do
     diagonal_marks(board)
-    |> row_win?(marks)
+    |> winning_mark_in_row
+  end
+
+  defp winning_mark_in_column(board) do
+    transpose(board)
+    |> winning_mark_in_row
+  end
+
+  defp winning_mark_in_row([]), do: ""
+  defp winning_mark_in_row([row | tail]) do
+    if not all_same_mark?([mark | _] = row) do
+      winning_mark_in_row(tail)
+    else
+      mark
+    end
+  end
+
+  def all_same_mark?([mark | t]) do
+    Enum.all?(t, fn(move) -> move == mark end)
+  end
+
+  def row_win?(board) do
+    found_winner_in_row?(board)
+  end
+
+  def column_win?(board) do
+    transpose(board)
+    |> row_win?
+  end
+
+  def diagonal_win?(board) do
+    diagonal_marks(board)
+    |> row_win?
+  end
+
+  defp found_winner_in_row?([], all_same), do: all_same
+  defp found_winner_in_row?(_, true), do: true
+  defp found_winner_in_row?([head | tail], false) do
+    found_winner_in_row?(tail, all_same_mark?(head))
+  end
+  def found_winner_in_row?(board) do
+    found_winner_in_row?(board, false)
   end
 
   defp remaining_spaces?(board, marks) do
@@ -46,44 +85,31 @@ defmodule TTT.Board do
     |> total_moves_made
   end
 
-  defp diagonal_marks(board) do
-    [diagonal_values(board) , diagonal_values(Enum.reverse(board))]
+  defp get_move_count_per_mark(board, marks) do
+    Enum.map(marks, fn(mark) ->
+      %{mark => position_count_for_mark(board, mark)}
+    end)
   end
 
-  defp diagonal_values(board) do
-    add_indexes(board)
-    |> marks_in_diagonal
-  end
-
-  defp marks_in_diagonal(board_with_index) do
-    Enum.map(board_with_index, fn({ row, index }) -> Enum.at(row, index) end)
-  end
-
-  defp row_win_for_mark?(mark, board) do
-   rows_with_all_same_mark?(mark, board)
-   |> any_wins_found?
-  end
-
-  defp rows_with_all_same_mark?(mark, board) do
-    Enum.map(board, fn(row) -> winning_row?(row, mark) end)
-  end
-
-  defp winning_row?(row, mark) do
-    Enum.all?(row, fn(elem) -> elem == mark end)
-  end
-
-  defp any_wins_found?(winners) do
-    Enum.any?(winners, fn(x) -> x == true end)
+  def position_count_for_mark(board, mark) do
+    Enum.reduce(board, 0, fn(row, acc) -> acc + Enum.count(row, fn(move) -> move == mark end) end)
   end
 
   defp total_moves_made(move_count) do
     Enum.reduce(move_count, 0, fn(mark_and_count, acc) -> acc + List.first(Map.values(mark_and_count)) end)
   end
 
-  defp get_move_count_per_mark(board, marks) do
-    Enum.map(marks, fn(mark) ->
-      %{mark => number_of_moves_with(board, mark)}
-    end)
+  def diagonal_marks(board) do
+    [diagonal_values(board) , diagonal_values(Enum.reverse(board))]
+  end
+
+  defp diagonal_values(board) do
+    Enum.with_index(board)
+    |> marks_in_diagonal
+  end
+
+  defp marks_in_diagonal(board_with_index) do
+    Enum.map(board_with_index, fn({ row, index }) -> Enum.at(row, index) end)
   end
 
   defp mark_with_fewest_moves(move_counts_per_mark) do
@@ -92,16 +118,8 @@ defmodule TTT.Board do
     |> List.to_string
   end
 
-  defp number_of_moves_with(board, mark) do
-    Enum.count(board, fn(move) -> move == mark end)
-  end
-
-  defp chunk_board_into_rows(board) do
-    Enum.chunk(board, round(:math.sqrt(length(board))))
-  end
-
-  defp add_indexes(list) do
-    Enum.with_index(list)
+  defp is_true? do
+    fn(x) -> x == true end
   end
 
   defp transpose([[]|_]), do: []
