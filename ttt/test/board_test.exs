@@ -70,4 +70,13 @@ defmodule BoardTest do
     marks = ["X", "O"]
     assert TTT.Board.found_winner?(List.flatten(board), marks) == true
   end
+
+  test "it has found a row win" do
+    row1 = ["X", "O", "X"]
+    row2 = ["X", "X" ,"X"]
+    row3 = ["O", "X", "O" ]
+    board = [row1, row2, row3]
+    marks = ["X", "O"]
+    assert TTT.Board.found_winner?(List.flatten(board), marks) == true
+  end
 end
