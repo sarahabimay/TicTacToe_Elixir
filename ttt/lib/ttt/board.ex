@@ -4,11 +4,21 @@ defmodule TTT.Board do
   end
 
   def play_move(board, move, mark) do
+    apply_action_to_position(board, replace_at_action(board, move, mark))
+  end
+
+  def apply_action_to_position(board, action_fn) do
     Enum.map(Enum.with_index(board), fn({row, row_index }) ->
       Enum.map(Enum.with_index(row), fn({element, col_index}) ->
-        replace_at(board, move, mark, element, row_index, col_index)
+        action_fn.(element, row_index, col_index)
       end)
     end)
+  end
+
+  def replace_at_action(board, move, mark) do
+    fn(element, row_index, col_index) ->
+      replace_at(board, move, mark, element, row_index, col_index)
+    end
   end
 
   def next_mark_to_play(board, marks) do
