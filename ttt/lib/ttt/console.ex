@@ -10,27 +10,9 @@ defmodule TTT.Console do
   end
 
   def display_board(board) do
-    IO.puts(format_board_for_display(board))
-  end
-
-  defp format_board_for_display(board) do
-    intersperse_column_divider(board)
-    |> intersperse_row_divider
-    |> append_newline
-  end
-
-  defp intersperse_column_divider(board) do
-    Enum.map(board, fn(row) ->
-      Enum.join(row, @column_divider)
-    end)
-  end
-
-  defp intersperse_row_divider(board) do
-    Enum.intersperse(board, @row_divider)
-  end
-
-  defp append_newline(board) do
-    Enum.join(board, "\n")
+    board
+    |> format_board_for_display
+    |> display_puts
   end
 
   def request_board_size do
@@ -45,21 +27,47 @@ defmodule TTT.Console do
     |> validate_game_type_choice
   end
 
+  defp format_board_for_display(board) do
+    board
+    |> intersperse_column_divider
+    |> intersperse_row_divider
+    |> append_newline
+  end
+
+  defp intersperse_column_divider(board) do
+    Enum.map(board, fn(row) ->
+      Enum.join(row, @column_divider)
+    end)
+  end
+
+  defp intersperse_row_divider(board) do
+    board
+    |> Enum.intersperse(@row_divider)
+  end
+
+  defp append_newline(board) do
+    Enum.join(board, "\n")
+  end
+
   defp _create_options_for_display(_, []), do: ""
   defp _create_options_for_display(number, options) do
     "[#{number}] #{Enum.at(options, number - 1)}\n" <>
     _create_options_for_display(number + 1, Enum.slice(options, number, Enum.count(options)))
   end
-  def create_options_for_display(options) do
+  defp create_options_for_display(options) do
     _create_options_for_display(1, options)
   end
 
-  def validate_board_size_choice(choice) do
+  defp validate_board_size_choice(choice) do
     TTT.Options.validate_board_size_option(choice)
   end
 
-  def validate_game_type_choice(choice) do
+  defp validate_game_type_choice(choice) do
     TTT.Options.validate_game_type_option(choice)
+  end
+
+  defp display_puts(message) do
+    IO.puts(message)
   end
 
   defp display_gets(message) do
