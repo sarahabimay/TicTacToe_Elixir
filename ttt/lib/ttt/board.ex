@@ -1,4 +1,5 @@
 defmodule TTT.Board do
+
   def empty_board(dimension) do
     Enum.to_list(1..dimension*dimension)
   end
@@ -18,20 +19,21 @@ defmodule TTT.Board do
   end
 
   def found_winner?(board, marks) do
-    column_win?(board, marks) || row_win?(board, marks) || diagonal_win?(board, marks)
+    two_d_board = chunk_board_into_rows(board)
+    column_win?(two_d_board, marks) or row_win?(two_d_board, marks) or diagonal_win?(two_d_board, marks)
   end
 
   defp column_win?(board, marks) do
-    false
+    transpose(board)
+    |> row_win?(marks)
   end
 
-  def row_win?(board, marks) do
+  defp row_win?(board, marks) do
     Enum.any?(marks, fn(mark) -> row_win_for_mark?(mark, board) == true end)
   end
 
-  def diagonal_win?(board, marks) do
-    chunk_board_into_rows(board)
-    |> diagonal_marks
+  defp diagonal_win?(board, marks) do
+    diagonal_marks(board)
     |> row_win?(marks)
   end
 
@@ -44,14 +46,8 @@ defmodule TTT.Board do
     |> total_moves_made
   end
 
-  defp row_win_for_mark?(mark, board) do
-   chunk_board_into_rows(board)
-   |> Enum.map(fn(row) -> all_the_same_mark?(row, mark) end)
-   |> Enum.any?(fn(x) -> x == true end)
-  end
-
-  def diagonal_marks(board) do
-    diagonal_values(board) ++ diagonal_values(Enum.reverse(board))
+  defp diagonal_marks(board) do
+    [diagonal_values(board) , diagonal_values(Enum.reverse(board))]
   end
 
   defp diagonal_values(board) do
@@ -63,8 +59,21 @@ defmodule TTT.Board do
     Enum.map(board_with_index, fn({ row, index }) -> Enum.at(row, index) end)
   end
 
-  defp all_the_same_mark?(row, mark) do
+  defp row_win_for_mark?(mark, board) do
+   rows_with_all_same_mark?(mark, board)
+   |> any_wins_found?
+  end
+
+  defp rows_with_all_same_mark?(mark, board) do
+    Enum.map(board, fn(row) -> winning_row?(row, mark) end)
+  end
+
+  defp winning_row?(row, mark) do
     Enum.all?(row, fn(elem) -> elem == mark end)
+  end
+
+  defp any_wins_found?(winners) do
+    Enum.any?(winners, fn(x) -> x == true end)
   end
 
   defp total_moves_made(move_count) do
@@ -93,5 +102,10 @@ defmodule TTT.Board do
 
   defp add_indexes(list) do
     Enum.with_index(list)
+  end
+
+  defp transpose([[]|_]), do: []
+  defp transpose(list) do
+    [Enum.map(list, &hd/1) | transpose(Enum.map(list, &tl/1))]
   end
 end

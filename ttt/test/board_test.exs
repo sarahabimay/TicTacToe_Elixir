@@ -50,7 +50,7 @@ defmodule BoardTest do
     board = [row1, row2, row3]
     diag1 = ["X", "X", "9"]
     diag2 = ["X", "X", "X"]
-    assert TTT.Board.diagonal_marks(board) == diag1 ++ diag2
+    assert TTT.Board.diagonal_marks(board) == [diag1, diag2]
   end
 
   test "it has a diagonal win" do
@@ -59,10 +59,10 @@ defmodule BoardTest do
     row3 = ["7", "8", "X" ]
     board = [row1, row2, row3]
     marks = ["X", "O"]
-    assert TTT.Board.diagonal_win?(List.flatten(board), marks) == true
+    assert TTT.Board.found_winner?(List.flatten(board), marks) == true
   end
 
-  test "it has found a diagonal win" do
+  test "it has found another diagonal win" do
     row1 = ["X", "O", "X"]
     row2 = ["O", "X" ,"O"]
     row3 = ["X", "8", "9" ]
@@ -75,6 +75,15 @@ defmodule BoardTest do
     row1 = ["X", "O", "X"]
     row2 = ["X", "X" ,"X"]
     row3 = ["O", "X", "O" ]
+    board = [row1, row2, row3]
+    marks = ["X", "O"]
+    assert TTT.Board.found_winner?(List.flatten(board), marks) == true
+  end
+
+  test "it has found a column win" do
+    row1 = ["O", "X", "O"]
+    row2 = ["O", "X" ,"X"]
+    row3 = ["X", "X", "O"]
     board = [row1, row2, row3]
     marks = ["X", "O"]
     assert TTT.Board.found_winner?(List.flatten(board), marks) == true
