@@ -4,15 +4,22 @@ defmodule BoardTest do
 
   test "it returns an empty 3x3 board" do
     dimension = 3
-    expected_board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    row1 = [1, 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    expected_board = [row1, row2, row3]
     assert TTT.Board.empty_board(dimension) == expected_board
   end
 
   test "it sets an X mark in a position" do
-    board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    next_move = 2
+    row1 = [1, 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    board = [row1, row2, row3]
+    next_move = 8
+    new_row3 = [7, "X", 9]
     next_mark = "X"
-    expected_board = [1, "X", 3, 4, 5, 6, 7, 8, 9]
+    expected_board = [row1, row2, new_row3]
     assert TTT.Board.play_move(board, next_move, next_mark) == expected_board
   end
 
@@ -22,7 +29,7 @@ defmodule BoardTest do
     row3 = [7, 8, 9]
     board = [row1, row2, row3]
     marks = ["X", "O"]
-    assert TTT.Board.next_mark_to_play(List.flatten(board), marks) == "X"
+    assert TTT.Board.next_mark_to_play(board, marks) == "X"
   end
 
   test "it knows the next player's mark" do
@@ -31,26 +38,23 @@ defmodule BoardTest do
     row3 = [7, 8, 9]
     board = [row1, row2, row3]
     marks = ["X", "O"]
-    assert TTT.Board.next_mark_to_play(List.flatten(board), marks) == "O"
+    assert TTT.Board.next_mark_to_play(board, marks) == "O"
   end
 
-  test "game is over if no more positions remaining" do
+  test "game is over if no positions remain" do
     row1 = ["X", "O", "X"]
     row2 = ["O", "X" ,"X"]
     row3 = ["O", "X", "O"]
     board = [row1, row2, row3]
-    marks = ["X", "O"]
-    assert TTT.Board.game_over?(List.flatten(board), marks) == true
+    assert TTT.Board.game_over?(board) == true
   end
 
-  test "diagonal values are pulled out of board" do
+  test "game is over when there is a win" do
     row1 = ["X", "O", "X"]
     row2 = ["O", "X" ,"O"]
-    row3 = ["X", "8", "9" ]
+    row3 = [7, 8, "X" ]
     board = [row1, row2, row3]
-    diag1 = ["X", "X", "9"]
-    diag2 = ["X", "X", "X"]
-    assert TTT.Board.diagonal_marks(board) == [diag1, diag2]
+    assert TTT.Board.game_over?(board) == true
   end
 
   test "it has a diagonal win" do
@@ -58,8 +62,7 @@ defmodule BoardTest do
     row2 = ["O", "X" ,"O"]
     row3 = ["7", "8", "X" ]
     board = [row1, row2, row3]
-    marks = ["X", "O"]
-    assert TTT.Board.found_winner?(List.flatten(board), marks) == true
+    assert TTT.Board.found_winner?(board) == true
   end
 
   test "it has found another diagonal win" do
@@ -67,8 +70,7 @@ defmodule BoardTest do
     row2 = ["O", "X" ,"O"]
     row3 = ["X", "8", "9" ]
     board = [row1, row2, row3]
-    marks = ["X", "O"]
-    assert TTT.Board.found_winner?(List.flatten(board), marks) == true
+    assert TTT.Board.found_winner?(board) == true
   end
 
   test "it has found a row win" do
@@ -76,8 +78,7 @@ defmodule BoardTest do
     row2 = ["X", "X" ,"X"]
     row3 = ["O", "X", "O" ]
     board = [row1, row2, row3]
-    marks = ["X", "O"]
-    assert TTT.Board.found_winner?(List.flatten(board), marks) == true
+    assert TTT.Board.found_winner?(board) == true
   end
 
   test "it has found a column win" do
@@ -85,7 +86,14 @@ defmodule BoardTest do
     row2 = ["O", "X" ,"X"]
     row3 = ["X", "X", "O"]
     board = [row1, row2, row3]
-    marks = ["X", "O"]
-    assert TTT.Board.found_winner?(List.flatten(board), marks) == true
+    assert TTT.Board.found_winner?(board) == true
+  end
+
+  test "X is the winner" do
+    row1 = ["O", "X", "O"]
+    row2 = ["O", "X" ,"X"]
+    row3 = ["X", "X", "O"]
+    board = [row1, row2, row3]
+    assert TTT.Board.winning_mark(board) == "X"
   end
 end
