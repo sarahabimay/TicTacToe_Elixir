@@ -1,0 +1,22 @@
+
+
+  def found_winner?(board, marks) do
+    column_win?(board, marks) || row_win?(board, marks) || diagonal_win?(board, marks)
+  end
+
+  defp column_win?(board, marks) do
+  end
+
+  def diagonal_win?(board, marks) do
+    diagonal_marks(board)
+    |> row_win?(marks)
+  end
+
+
+
+
+  defp transpose([[]|_]), do: []
+  defp transpose(list) do
+    [Enum.map(list, &hd/1) | transpose(Enum.map(list, &tl/1))]
+  end
+
