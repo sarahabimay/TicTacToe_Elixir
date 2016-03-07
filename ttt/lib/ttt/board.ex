@@ -103,16 +103,16 @@ defmodule TTT.Board do
   end
 
   defp replace_at(board, move, mark, element, row_index, column_index) do
-    update_position?(board_dimension(board), row_index, column_index, move)
+    is_position?(board_dimension(board), row_index, column_index, move)
     |> position_value(mark, element)
   end
 
-  defp update_position?(dimension, row_index, col_index, move) do
+  defp is_position?(dimension, row_index, col_index, move) do
     (row_index * dimension + col_index) == move - 1
   end
 
-  defp position_value(is_update, mark, elem) do
-    if is_update do mark else elem end
+  defp position_value(get_mark, mark, elem) do
+    if get_mark do mark else elem end
   end
 
   defp get_move_count_per_mark(board, marks) do
