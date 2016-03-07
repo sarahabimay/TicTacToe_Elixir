@@ -4,20 +4,18 @@ defmodule TTT.Board do
   end
 
   def play_move(board, move, mark) do
-    Enum.map(Enum.with_index(board), fn({row, row_index }) ->
-      Enum.map(Enum.with_index(row), fn({element, col_index}) ->
-        replace_at(board, move, mark, element, row_index, col_index)
-      end)
-    end)
+    board
+    |> replace_at(mark, matrix_row_index(move, board), matrix_column_index(move, board))
   end
 
   def next_mark_to_play(board, marks) do
-    get_move_count_per_mark(board, marks)
+    board
+    |> get_move_count_per_mark(marks)
     |> mark_with_fewest_moves
   end
 
   def game_over?(board) do
-    Enum.any?([not remaining_spaces?(board), found_winner?(board)], is_true?)
+    not remaining_spaces?(board) or found_winner?(board)
   end
 
   def winning_mark(board) do
@@ -27,21 +25,20 @@ defmodule TTT.Board do
   end
 
   def found_winner?(board) do
-    Enum.any?(win_in_any_direction?(board), is_true?)
+    column_win?(board) or found_winner_in_row?(board) or diagonal_win?(board)
   end
 
-  defp win_in_any_direction?(board) do
-    [column_win?(board), row_win?(board), diagonal_win?(board)]
+  defp replace_at(board, mark, row_index, column_index) do
+    board
+    |> List.update_at(column_index, &(List.replace_at(&1, row_index - 1, mark)))
   end
 
-  defp winning_mark_in_diagonal(board) do
-    diagonal_marks(board)
-    |> winning_mark_in_row
+  defp matrix_row_index(position, board) do
+    div(position, board_dimension(board))
   end
 
-  defp winning_mark_in_column(board) do
-    transpose(board)
-    |> winning_mark_in_row
+  defp matrix_column_index(position, board) do
+    rem(position, board_dimension(board))
   end
 
   defp winning_mark_in_row([]), do: ""
@@ -53,39 +50,45 @@ defmodule TTT.Board do
     end
   end
 
+  defp winning_mark_in_diagonal(board) do
+    board
+    |> diagonal_marks
+    |> winning_mark_in_row
+  end
+
+  defp winning_mark_in_column(board) do
+    board
+    |> transpose
+    |> winning_mark_in_row
+  end
   def all_same_mark?([mark | t]) do
     Enum.all?(t, fn(move) -> move == mark end)
   end
 
-  def row_win?(board) do
-    found_winner_in_row?(board)
-  end
-
   def column_win?(board) do
-    transpose(board)
-    |> row_win?
+    board
+    |> transpose
+    |> found_winner_in_row?
   end
 
   def diagonal_win?(board) do
-    diagonal_marks(board)
-    |> row_win?
+    board
+    |> diagonal_marks
+    |> found_winner_in_row?
   end
 
-  defp found_winner_in_row?([], all_same), do: all_same
-  defp found_winner_in_row?(_, true), do: true
-  defp found_winner_in_row?([head | tail], false) do
-    found_winner_in_row?(tail, all_same_mark?(head))
-  end
   def found_winner_in_row?(board) do
-    found_winner_in_row?(board, false)
+     board
+     |> Enum.any?(fn(row) -> all_same_mark?(row) end)
   end
 
   def diagonal_marks(board) do
-    [diagonal_values(board) , diagonal_values(Enum.reverse(board))]
+    [diagonal_values(board), diagonal_values(Enum.reverse(board))]
   end
 
   defp diagonal_values(board) do
-    Enum.with_index(board)
+    board
+    |> Enum.with_index
     |> marks_in_diagonal
   end
 
@@ -93,26 +96,14 @@ defmodule TTT.Board do
     Enum.map(board_with_index, fn({ row, index }) -> Enum.at(row, index) end)
   end
 
-  def remaining_spaces?(board) do
-    unique_elements(board)
+  defp remaining_spaces?(board) do
+    board
+    |> unique_elements
     |> Enum.any?(fn(elem) -> is_integer(elem) end)
   end
 
-  def unique_elements(board) do
+  defp unique_elements(board) do
     Enum.uniq(List.flatten(board))
-  end
-
-  defp replace_at(board, move, mark, element, row_index, column_index) do
-    is_position?(board_dimension(board), row_index, column_index, move)
-    |> position_value(mark, element)
-  end
-
-  defp is_position?(dimension, row_index, col_index, move) do
-    (row_index * dimension + col_index) == move - 1
-  end
-
-  defp position_value(get_mark, mark, elem) do
-    if get_mark do mark else elem end
   end
 
   defp get_move_count_per_mark(board, marks) do
@@ -121,11 +112,11 @@ defmodule TTT.Board do
     end)
   end
 
-  def position_count_for_mark(board, mark) do
+  defp position_count_for_mark(board, mark) do
     Enum.reduce(board, 0, fn(row, acc) -> acc + mark_count_in_row(row, mark)  end)
   end
 
-  def mark_count_in_row(row, mark) do
+  defp mark_count_in_row(row, mark) do
     Enum.count(row, fn(move) -> move == mark end)
   end
 
@@ -135,17 +126,14 @@ defmodule TTT.Board do
     |> List.to_string
   end
 
-  defp is_true? do
-    fn(x) -> x == true end
-  end
-
   defp transpose([[]|_]), do: []
   defp transpose(list) do
     [Enum.map(list, &hd/1) | transpose(Enum.map(list, &tl/1))]
   end
 
   def board_dimension(board) do
-    List.flatten(board)
+    board
+    |> List.flatten
     |> length
     |> :math.sqrt
     |> round
