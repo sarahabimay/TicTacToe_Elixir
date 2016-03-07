@@ -1,17 +1,33 @@
 defmodule TTT.Board do
+  @x_mark "X"
+  @o_mark "O"
+
   def empty_board(dimension) do
-    Enum.chunk(Enum.to_list(1..dimension*dimension), dimension)
+    rows(Enum.to_list(1..dimension*dimension))
   end
 
   def play_move(board, move, mark) do
-    board
-    |> replace_at(mark, matrix_row_index(move, board), matrix_column_index(move, board))
+    List.replace_at(board, move - 1, mark)
   end
 
-  def next_mark_to_play(board, marks) do
+  def next_mark_to_play(board) do
     board
-    |> get_move_count_per_mark(marks)
+    |> rows
+    |> get_move_count_per_mark
     |> mark_with_fewest_moves
+  end
+
+  def get_move_count_per_mark(board) do
+      [%{@x_mark => position_count_for_mark(board, @x_mark)},
+      %{@o_mark => position_count_for_mark(board, @o_mark)}]
+  end
+
+  def position_count_for_mark(board, mark) do
+    Enum.reduce(board, 0, fn(row, acc) -> acc + mark_count_in_row(row, mark)  end)
+  end
+
+  defp mark_count_in_row(row, mark) do
+    Enum.count(row, fn(move) -> move == mark end)
   end
 
   def game_over?(board) do
@@ -19,67 +35,42 @@ defmodule TTT.Board do
   end
 
   def winning_mark(board) do
-    winning_mark_in_row(board) <>
-     winning_mark_in_column(board) <>
-      winning_mark_in_diagonal(board)
+    all_lines = rows(board) ++ columns(board) ++ diagonals(board)
+    find_winning_mark(all_lines)
   end
 
   def found_winner?(board) do
-    column_win?(board) or found_winner_in_row?(board) or diagonal_win?(board)
+    all_lines = rows(board) ++ columns(board) ++ diagonals(board)
+    found_winner_in_any_line?(all_lines)
   end
 
-  defp replace_at(board, mark, row_index, column_index) do
+  def found_winner_in_any_line?(lines) do
+     Enum.any?(lines, fn(line) -> all_same_mark?(line) end)
+  end
+
+  def find_winning_mark(lines) do
+    line = Enum.find(lines, fn(line) -> all_same_mark?(line) end)
+    List.first(line)
+  end
+
+  def rows(board) do
+   Enum.chunk(board, board_dimension(board))
+  end
+
+  def columns(board) do
     board
-    |> List.update_at(column_index, &(List.replace_at(&1, row_index - 1, mark)))
-  end
-
-  defp matrix_row_index(position, board) do
-    div(position, board_dimension(board))
-  end
-
-  defp matrix_column_index(position, board) do
-    rem(position, board_dimension(board))
-  end
-
-  defp winning_mark_in_row([]), do: ""
-  defp winning_mark_in_row([row | tail]) do
-    if not all_same_mark?([mark | _] = row) do
-      winning_mark_in_row(tail)
-    else
-      mark
-    end
-  end
-
-  defp winning_mark_in_diagonal(board) do
-    board
-    |> diagonal_marks
-    |> winning_mark_in_row
-  end
-
-  defp winning_mark_in_column(board) do
-    board
+    |> rows
     |> transpose
-    |> winning_mark_in_row
-  end
-  def all_same_mark?([mark | t]) do
-    Enum.all?(t, fn(move) -> move == mark end)
   end
 
-  def column_win?(board) do
+  def diagonals(board) do
     board
-    |> transpose
-    |> found_winner_in_row?
-  end
-
-  def diagonal_win?(board) do
-    board
+    |> rows
     |> diagonal_marks
-    |> found_winner_in_row?
   end
 
-  def found_winner_in_row?(board) do
-     board
-     |> Enum.any?(fn(row) -> all_same_mark?(row) end)
+  def all_same_mark?([first_mark | rest]) do
+    Enum.all?(rest, fn(mark) -> mark == first_mark end)
   end
 
   def diagonal_marks(board) do
@@ -98,29 +89,16 @@ defmodule TTT.Board do
 
   defp remaining_spaces?(board) do
     board
+    |> rows
     |> unique_elements
     |> Enum.any?(fn(elem) -> is_integer(elem) end)
   end
 
   defp unique_elements(board) do
-    Enum.uniq(List.flatten(board))
+    Enum.uniq(board)
   end
 
-  defp get_move_count_per_mark(board, marks) do
-    Enum.map(marks, fn(mark) ->
-      %{mark => position_count_for_mark(board, mark)}
-    end)
-  end
-
-  defp position_count_for_mark(board, mark) do
-    Enum.reduce(board, 0, fn(row, acc) -> acc + mark_count_in_row(row, mark)  end)
-  end
-
-  defp mark_count_in_row(row, mark) do
-    Enum.count(row, fn(move) -> move == mark end)
-  end
-
-  defp mark_with_fewest_moves(move_counts_per_mark) do
+  def mark_with_fewest_moves(move_counts_per_mark) do
     Enum.min_by(move_counts_per_mark, fn(x) -> Map.values(x) end)
     |> Map.keys
     |> List.to_string
