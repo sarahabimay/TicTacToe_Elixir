@@ -1,4 +1,5 @@
 defmodule TTT.Console do
+  alias TTT.Options, as: Options
   @request_move "Please enter a valid move: "
   @board_size_title "Board Size:\n"
   @game_type_title "Game Type:\n"
@@ -15,23 +16,51 @@ defmodule TTT.Console do
     |> display_puts
   end
 
-  def request_board_size do
-    @board_size_title <> create_options_for_display(TTT.Options.board_size_options)
-    |> display_gets
-    |> validate_board_size_choice
-  end
-
-  def request_game_type do
-    @game_type_title <> create_options_for_display(TTT.Options.game_type_options)
-    |> display_gets
-    |> validate_game_type_choice
-  end
-
-  defp format_board_for_display(board) do
+  def format_board_for_display(board) do
     board
     |> intersperse_column_divider
     |> intersperse_row_divider
     |> append_newline
+  end
+
+  def request_board_size do
+    request_board_size_choice
+    |> Options.lookup_board_size
+    |> request_board_size
+  end
+
+  defp request_board_size(:invalid), do: request_board_size
+  defp request_board_size(board_size), do: board_size
+
+  def request_game_type do
+    request_game_type_choice
+    |> Options.lookup_game_type
+    |> request_game_type
+  end
+
+  def request_game_type(:invalid), do: request_game_type
+  def request_game_type(game_type), do: game_type
+
+  def request_next_move(mark) do
+   display_gets("Player #{mark}, #{@request_move}")
+  end
+
+  defp request_board_size_choice do
+    request_board_size_message
+    |> display_gets
+  end
+
+  def request_board_size_message do
+    @board_size_title <> create_options_for_display(TTT.Options.board_size_options)
+  end
+
+  defp request_game_type_choice do
+    request_game_type_message
+    |> display_gets
+  end
+
+  defp request_game_type_message do
+    @game_type_title <> create_options_for_display(TTT.Options.game_type_options)
   end
 
   defp intersperse_column_divider(board) do
@@ -49,21 +78,17 @@ defmodule TTT.Console do
     Enum.join(board, "\n")
   end
 
-  defp _create_options_for_display(_, []), do: ""
-  defp _create_options_for_display(number, options) do
-    "[#{number}] #{Enum.at(options, number - 1)}\n" <>
-    _create_options_for_display(number + 1, Enum.slice(options, number, Enum.count(options)))
-  end
-  defp create_options_for_display(options) do
-    _create_options_for_display(1, options)
+  def create_options_for_display(options) do
+    options
+    |> one_indexed
+    |> Enum.reverse
+    |> Enum.reduce("", fn({element, index}, acc) -> "[#{index}] #{element}\n#{acc}" end)
   end
 
-  defp validate_board_size_choice(choice) do
-    TTT.Options.validate_board_size_option(choice)
-  end
-
-  defp validate_game_type_choice(choice) do
-    TTT.Options.validate_game_type_option(choice)
+  def one_indexed(options) do
+    options
+    |> Enum.with_index
+    |> Enum.map(fn({element, index}) -> {element, index+1} end)
   end
 
   defp display_puts(message) do
