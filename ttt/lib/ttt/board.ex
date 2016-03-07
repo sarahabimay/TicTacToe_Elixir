@@ -8,7 +8,6 @@ defmodule TTT.Board do
     |> replace_at(mark, matrix_row_index(move, board), matrix_column_index(move, board))
   end
 
-
   def next_mark_to_play(board, marks) do
     board
     |> get_move_count_per_mark(marks)
@@ -78,13 +77,9 @@ defmodule TTT.Board do
     |> found_winner_in_row?
   end
 
-  defp found_winner_in_row?([], all_same), do: all_same
-  defp found_winner_in_row?(_, true), do: true
-  defp found_winner_in_row?([head | tail], false) do
-    found_winner_in_row?(tail, all_same_mark?(head))
-  end
   def found_winner_in_row?(board) do
-    found_winner_in_row?(board, false)
+     board
+     |> Enum.any?(fn(row) -> all_same_mark?(row) end)
   end
 
   def diagonal_marks(board) do
