@@ -17,12 +17,57 @@ defmodule TTT.Board do
     |> mark_with_fewest_moves
   end
 
-  def get_move_count_per_mark(board) do
+  def game_over?(board) do
+    not remaining_spaces?(board) or found_winner?(board)
+  end
+
+  def winning_mark(board) do
+    board
+    |> all_lines
+    |> find_winning_mark
+  end
+
+  def found_winner?(board) do
+    board
+    |> all_lines
+    |> found_winner_in_any_line?
+  end
+
+  defp all_lines(board) do
+    rows(board) ++ columns(board) ++ diagonals(board)
+  end
+
+  defp found_winner_in_any_line?(lines) do
+     Enum.any?(lines, fn(line) -> all_same_mark?(line) end)
+  end
+
+  defp find_winning_mark(lines) do
+    line = Enum.find(lines, fn(line) -> all_same_mark?(line) end)
+    List.first(line)
+  end
+
+  defp rows(board) do
+   Enum.chunk(board, board_dimension(board))
+  end
+
+  defp columns(board) do
+    board
+    |> rows
+    |> transpose
+  end
+
+  defp diagonals(board) do
+    board
+    |> rows
+    |> diagonal_marks
+  end
+
+  defp get_move_count_per_mark(board) do
       [%{@x_mark => position_count_for_mark(board, @x_mark)},
       %{@o_mark => position_count_for_mark(board, @o_mark)}]
   end
 
-  def position_count_for_mark(board, mark) do
+  defp position_count_for_mark(board, mark) do
     Enum.reduce(board, 0, fn(row, acc) -> acc + mark_count_in_row(row, mark)  end)
   end
 
@@ -30,50 +75,11 @@ defmodule TTT.Board do
     Enum.count(row, fn(move) -> move == mark end)
   end
 
-  def game_over?(board) do
-    not remaining_spaces?(board) or found_winner?(board)
-  end
-
-  def winning_mark(board) do
-    all_lines = rows(board) ++ columns(board) ++ diagonals(board)
-    find_winning_mark(all_lines)
-  end
-
-  def found_winner?(board) do
-    all_lines = rows(board) ++ columns(board) ++ diagonals(board)
-    found_winner_in_any_line?(all_lines)
-  end
-
-  def found_winner_in_any_line?(lines) do
-     Enum.any?(lines, fn(line) -> all_same_mark?(line) end)
-  end
-
-  def find_winning_mark(lines) do
-    line = Enum.find(lines, fn(line) -> all_same_mark?(line) end)
-    List.first(line)
-  end
-
-  def rows(board) do
-   Enum.chunk(board, board_dimension(board))
-  end
-
-  def columns(board) do
-    board
-    |> rows
-    |> transpose
-  end
-
-  def diagonals(board) do
-    board
-    |> rows
-    |> diagonal_marks
-  end
-
-  def all_same_mark?([first_mark | rest]) do
+  defp all_same_mark?([first_mark | rest]) do
     Enum.all?(rest, fn(mark) -> mark == first_mark end)
   end
 
-  def diagonal_marks(board) do
+  defp diagonal_marks(board) do
     [diagonal_values(board), diagonal_values(Enum.reverse(board))]
   end
 
@@ -109,7 +115,7 @@ defmodule TTT.Board do
     [Enum.map(list, &hd/1) | transpose(Enum.map(list, &tl/1))]
   end
 
-  def board_dimension(board) do
+  defp board_dimension(board) do
     board
     |> List.flatten
     |> length
