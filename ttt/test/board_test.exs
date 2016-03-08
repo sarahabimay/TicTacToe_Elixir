@@ -28,7 +28,6 @@ defmodule BoardTest do
     row2 = [4, 5, 6]
     row3 = [7, 8, 9]
     board = row1 ++ row2 ++ row3
-    marks = ["X", "O"]
     assert TTT.Board.next_mark_to_play(board) == "X"
   end
 
@@ -71,36 +70,6 @@ defmodule BoardTest do
     board = row1 ++ row2 ++ row3
     assert TTT.Board.found_winner?(board) == true
   end
-
-  test "board can provide the rows" do
-    row1 = [1, 2, 3]
-    row2 = [4, 5, 6]
-    row3 = [7, 8, 9]
-    board = row1 ++ row2 ++ row3
-    assert TTT.Board.rows(board) == [row1, row2, row3]
-  end
-
-  test "board can provide the columns" do
-    row1 = [1, 2, 3]
-    row2 = [4, 5, 6]
-    row3 = [7, 8, 9]
-    column1 = [1, 4, 7]
-    column2 = [2, 5, 8]
-    column3 = [3, 6, 9]
-    board = row1 ++ row2 ++ row3
-    assert TTT.Board.columns(board) == [column1, column2, column3]
-  end
-
-  test "board can provide the diagonals" do
-    row1 = [1, 2, 3]
-    row2 = [4, 5, 6]
-    row3 = [7, 8, 9]
-    diagonal1 = [1, 5, 9]
-    diagonal2 = [7, 5, 3]
-    board = row1 ++ row2 ++ row3
-    assert TTT.Board.diagonals(board) == [diagonal1, diagonal2]
-  end
-
 
   test "it has found a row win" do
     row1 = ["X", "O", "X"]
