@@ -55,7 +55,6 @@ defmodule ConsoleTest do
   end
 
   test "it displays HVH game with 3x3 board" do
-    board_dimension = 3
     row1_display = "1 | 2 | 3\n"
     row2_display = "4 | 5 | 6\n"
     row3_display = "7 | 8 | 9\n"
@@ -87,7 +86,6 @@ defmodule ConsoleTest do
     row3 = [7, 8, 9]
     board = row1 ++ row2 ++ row3
     move = "0"
-    mark = "X"
     action_fn = fn -> assert Console.validate_next_move(board, move) == :invalid end
     IOAssert.assert_with_input(move, action_fn)
   end

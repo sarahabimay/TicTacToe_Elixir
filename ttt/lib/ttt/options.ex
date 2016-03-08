@@ -1,5 +1,4 @@
 defmodule TTT.Options do
-
   @board_sizes  %{3 => "3X3"}
   @game_types %{HVH => "Human VS Human"}
 
@@ -41,7 +40,7 @@ defmodule TTT.Options do
     _validate_option(Integer.parse(option), number_of_options)
   end
 
-  defp _validate_option(:error), do: :invalid
+  defp _validate_option(:error, _), do: :invalid
   defp _validate_option({x, _}, number_of_options) when x > 0 and x <= number_of_options, do: x
-  defp _validate_option(_, number_of_options), do: :invalid
+  defp _validate_option(_, _), do: :invalid
 end

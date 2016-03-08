@@ -3,7 +3,7 @@ defmodule TTT.Board do
   @o_mark "O"
 
   def empty_board(dimension) do
-    rows(Enum.to_list(1..dimension*dimension))
+    Enum.to_list(1..dimension*dimension)
   end
 
   def play_move(board, move, mark) do
@@ -93,9 +93,8 @@ defmodule TTT.Board do
     Enum.map(board_with_index, fn({ row, index }) -> Enum.at(row, index) end)
   end
 
-  defp remaining_spaces?(board) do
+  def remaining_spaces?(board) do
     board
-    |> rows
     |> unique_elements
     |> Enum.any?(fn(elem) -> is_integer(elem) end)
   end
