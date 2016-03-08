@@ -63,7 +63,7 @@ defmodule TTT.Console do
   end
 
   defp request_board_size_message do
-    @board_size_title <> create_options_for_display(TTT.Options.board_size_options)
+    @board_size_title <> create_options_for_display(Options.board_size_options)
   end
 
   defp request_game_type_choice do
@@ -72,7 +72,7 @@ defmodule TTT.Console do
   end
 
   defp request_game_type_message do
-    @game_type_title <> create_options_for_display(TTT.Options.game_type_options)
+    @game_type_title <> create_options_for_display(Options.game_type_options)
   end
 
   def announce_result(false, board), do: announce_draw(board)

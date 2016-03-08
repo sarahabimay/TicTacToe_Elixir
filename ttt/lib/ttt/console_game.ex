@@ -3,12 +3,11 @@ defmodule TTT.ConsoleGame do
   alias TTT.Board, as: Board
 
   def start_game do
-    [board_size, game_type] = Console.request_options
+    [board_size, _] = Console.request_options
     play_game(board_size)
   end
 
   def play_game(board) when is_list(board) do
-    Console.display_board(board)
     mark = Board.next_mark_to_play(board)
     move = Console.request_next_move(board, mark)
     new_board = Board.play_move(board, move, mark)
@@ -17,8 +16,9 @@ defmodule TTT.ConsoleGame do
   end
 
   def play_game(dimension) do
-    Board.empty_board(dimension)
-    |> play_game
+    board = Board.empty_board(dimension)
+    Console.display_board(board)
+    play_game(board)
   end
 
   def _play_game(false, board), do: play_game(board)
