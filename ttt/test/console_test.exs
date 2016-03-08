@@ -56,12 +56,15 @@ defmodule ConsoleTest do
 
   test "it displays HVH game with 3x3 board" do
     board_dimension = 3
-    row1 = "1 | 2 | 3\n"
-    row2 = "4 | 5 | 6\n"
-    row3 = "7 | 8 | 9\n"
+    row1_display = "1 | 2 | 3\n"
+    row2_display = "4 | 5 | 6\n"
+    row3_display = "7 | 8 | 9\n"
     row_divider = "____________\n"
-    expected = row1 <> row_divider <>row2 <> row_divider <> row3
-    empty_board = TTT.Board.empty_board(board_dimension)
+    expected = row1_display <> row_divider <> row2_display <> row_divider <> row3_display
+    row1 = [1, 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    empty_board = row1 ++ row2 ++ row3
     action_fn = fn -> Console.display_board(empty_board) end
     assert_fn = fn(result) -> assert String.contains?(result, expected) end
     IOAssert.stdout_assert(action_fn, assert_fn)
@@ -78,11 +81,15 @@ defmodule ConsoleTest do
     row1 = ["X", "O", "X"]
     row2 = ["O", "X" ,"X"]
     row3 = ["O", "X", "O"]
-    board = [row1, row2, row3]
-    board_for_display = Console.format_board_for_display(board)
-    expected = board_for_display <> "\n" <> "Game Over! The game was a draw."
-    action_fn = fn -> Console.announce_draw(board) end
-    assert_fn = fn(result) -> assert String.contains?(result, expected) end
-    IOAssert.stdout_assert(action_fn, assert_fn)
+    board = row1 ++ row2 ++ row3
+    assert Console.announce_draw(board) == :ok
+  end
+
+  test "announceme the game was won by X" do
+    row1 = ["X", "O", "X"]
+    row2 = ["O", "X" ,"O"]
+    row3 = ["7", "8", "X" ]
+    board = row1 ++ row2 ++ row3
+    assert Console.announce_win(board, "X") == :ok
   end
 end

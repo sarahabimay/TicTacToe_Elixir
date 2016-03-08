@@ -1,8 +1,11 @@
 defmodule TTT.Console do
   alias TTT.Options, as: Options
+  alias TTT.Board, as: Board
   @request_move "Please enter a valid move: "
   @board_size_title "Board Size:\n"
   @game_type_title "Game Type:\n"
+  @draw_announcement "Game Over! The game was a draw."
+  @win_announcement "Game Over! The winner is: "
   @column_divider " | "
   @row_divider  "____________"
 
@@ -18,9 +21,22 @@ defmodule TTT.Console do
 
   def format_board_for_display(board) do
     board
+    |> Board.rows
     |> intersperse_column_divider
     |> intersperse_row_divider
     |> append_newline
+  end
+
+  def request_next_move(mark) do
+   display_gets("Player #{mark}, #{@request_move}")
+  end
+
+  def announce_draw(board) do
+    display_puts(format_board_for_display(board) <> @draw_announcement)
+  end
+
+  def announce_win(board, mark) do
+    display_puts(format_board_for_display(board) <> @win_announcement <> mark)
   end
 
   def request_board_size do
@@ -38,19 +54,15 @@ defmodule TTT.Console do
     |> request_game_type
   end
 
-  def request_game_type(:invalid), do: request_game_type
-  def request_game_type(game_type), do: game_type
-
-  def request_next_move(mark) do
-   display_gets("Player #{mark}, #{@request_move}")
-  end
+  defp request_game_type(:invalid), do: request_game_type
+  defp request_game_type(game_type), do: game_type
 
   defp request_board_size_choice do
     request_board_size_message
     |> display_gets
   end
 
-  def request_board_size_message do
+  defp request_board_size_message do
     @board_size_title <> create_options_for_display(TTT.Options.board_size_options)
   end
 
@@ -85,7 +97,7 @@ defmodule TTT.Console do
     |> Enum.reduce("", fn({element, index}, acc) -> "[#{index}] #{element}\n#{acc}" end)
   end
 
-  def one_indexed(options) do
+  defp one_indexed(options) do
     options
     |> Enum.with_index
     |> Enum.map(fn({element, index}) -> {element, index+1} end)

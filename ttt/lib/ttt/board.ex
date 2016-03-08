@@ -46,7 +46,7 @@ defmodule TTT.Board do
     List.first(line)
   end
 
-  defp rows(board) do
+  def rows(board) do
    Enum.chunk(board, board_dimension(board))
   end
 
