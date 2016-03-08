@@ -16,6 +16,7 @@ defmodule TTT.Console do
   def display_board(board) do
     board
     |> format_board_for_display
+    |> append_newline
     |> display_puts
   end
 
@@ -24,7 +25,7 @@ defmodule TTT.Console do
     |> Board.rows
     |> intersperse_column_divider
     |> intersperse_row_divider
-    |> append_newline
+    |> append_newline_to_row
   end
 
   def request_next_move(board, mark) do
@@ -36,14 +37,6 @@ defmodule TTT.Console do
 
   def validate_next_move(board, move) do
     Board.validate_move(board, move)
-  end
-
-  def announce_draw(board) do
-    display_puts(format_board_for_display(board) <> @draw_announcement)
-  end
-
-  def announce_win(board, mark) do
-    display_puts(format_board_for_display(board) <> @win_announcement <> mark)
   end
 
   def request_board_size do
@@ -82,6 +75,20 @@ defmodule TTT.Console do
     @game_type_title <> create_options_for_display(TTT.Options.game_type_options)
   end
 
+  def announce_result(false, board), do: announce_draw(board)
+  def announce_result(true, board) do
+    mark = Board.winning_mark(board)
+    announce_win(board, mark)
+  end
+
+  def announce_draw(board) do
+    display_puts(@draw_announcement)
+  end
+
+  def announce_win(board, mark) do
+    display_puts(@win_announcement <> mark)
+  end
+
   defp intersperse_column_divider(board) do
     Enum.map(board, fn(row) ->
       Enum.join(row, @column_divider)
@@ -93,7 +100,11 @@ defmodule TTT.Console do
     |> Enum.intersperse(@row_divider)
   end
 
-  defp append_newline(board) do
+  defp append_newline(message) do
+    message <> "\n"
+  end
+
+  defp append_newline_to_row(board) do
     Enum.join(board, "\n")
   end
 
@@ -115,6 +126,6 @@ defmodule TTT.Console do
   end
 
   defp display_gets(message) do
-    IO.gets(message)
+    String.strip(IO.gets(message))
   end
 end

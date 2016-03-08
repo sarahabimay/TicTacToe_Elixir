@@ -7,7 +7,7 @@ defmodule BoardTest do
     row1 = [1, 2, 3]
     row2 = [4, 5, 6]
     row3 = [7, 8, 9]
-    expected_board = [row1, row2, row3]
+    expected_board = row1 ++ row2 ++ row3
     assert TTT.Board.empty_board(dimension) == expected_board
   end
 
