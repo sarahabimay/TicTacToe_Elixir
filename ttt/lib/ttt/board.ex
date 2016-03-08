@@ -122,4 +122,13 @@ defmodule TTT.Board do
     |> :math.sqrt
     |> round
   end
+
+  def validate_move(board, move) do
+    max_position = Enum.count(board)
+    _validate_move(Integer.parse(move), max_position)
+  end
+
+  defp _validate_move(:error, _), do: :invalid
+  defp _validate_move({x, _}, max_position) when x > 0 and x <= max_position, do: x
+  defp _validate_move(_, _), do: :invalid
 end

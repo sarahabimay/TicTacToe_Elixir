@@ -38,10 +38,10 @@ defmodule TTT.Options do
 
   defp validate_option(options, option) do
     number_of_options = Enum.count(options)
-    case Integer.parse(option) do
-      {x, _} when x > 0 and x <= number_of_options -> x
-      :error -> :invalid
-      _ -> :invalid
-    end
+    _validate_option(Integer.parse(option), number_of_options)
   end
+
+  defp _validate_option(:error), do: :invalid
+  defp _validate_option({x, _}, number_of_options) when x > 0 and x <= number_of_options, do: x
+  defp _validate_option(_, number_of_options), do: :invalid
 end

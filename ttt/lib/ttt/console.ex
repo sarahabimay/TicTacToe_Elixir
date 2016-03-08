@@ -27,8 +27,15 @@ defmodule TTT.Console do
     |> append_newline
   end
 
-  def request_next_move(mark) do
-   display_gets("Player #{mark}, #{@request_move}")
+  def request_next_move(board, mark) do
+    request_next_move(board, mark, validate_next_move(board, display_gets("Player #{mark}, #{@request_move}")))
+  end
+
+  def request_next_move(board, mark, :invalid), do: request_next_move(board, mark)
+  def request_next_move(board, mark, move), do: move
+
+  def validate_next_move(board, move) do
+    Board.validate_move(board, move)
   end
 
   def announce_draw(board) do
