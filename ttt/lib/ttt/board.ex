@@ -1,6 +1,4 @@
 defmodule TTT.Board do
-  @x_mark "X"
-  @o_mark "O"
 
   def empty_board(dimension) do
     Enum.to_list(1..dimension*dimension)
@@ -63,8 +61,10 @@ defmodule TTT.Board do
   end
 
   defp get_move_count_per_mark(board) do
-      [%{@x_mark => position_count_for_mark(board, @x_mark)},
-      %{@o_mark => position_count_for_mark(board, @o_mark)}]
+      [
+        %{"X" => position_count_for_mark(board, "X")},
+        %{"O" => position_count_for_mark(board, "O")}
+      ]
   end
 
   defp position_count_for_mark(board, mark) do

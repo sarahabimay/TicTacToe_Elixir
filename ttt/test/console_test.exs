@@ -106,7 +106,10 @@ defmodule ConsoleTest do
     row2 = ["O", "X" ,"X"]
     row3 = ["O", "X", "O"]
     board = row1 ++ row2 ++ row3
-    assert Console.announce_draw(board) == :ok
+    result = capture_io(fn ->
+       Console.announce_draw(board)
+    end)
+    assert result == "Game Over! The game was a draw.\n"
   end
 
   test "announceme the game was won by X" do
@@ -114,6 +117,9 @@ defmodule ConsoleTest do
     row2 = ["O", "X" ,"O"]
     row3 = ["7", "8", "X" ]
     board = row1 ++ row2 ++ row3
-    assert Console.announce_win(board, "X") == :ok
+    result = capture_io(fn ->
+       Console.announce_win(board, "X")
+    end)
+    assert result == "Game Over! The winner is: X\n"
   end
 end
