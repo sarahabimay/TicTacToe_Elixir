@@ -102,23 +102,15 @@ defmodule ConsoleTest do
   end
 
   test "game is a draw announcement" do
-    row1 = ["X", "O", "X"]
-    row2 = ["O", "X" ,"X"]
-    row3 = ["O", "X", "O"]
-    board = row1 ++ row2 ++ row3
     result = capture_io(fn ->
-       Console.announce_draw(board)
+       Console.announce_draw
     end)
     assert result == "Game Over! The game was a draw.\n"
   end
 
   test "announce the game was won by X" do
-    row1 = ["X", "O", "X"]
-    row2 = ["O", "X" ,"O"]
-    row3 = ["7", "8", "X" ]
-    board = row1 ++ row2 ++ row3
     result = capture_io(fn ->
-       Console.announce_win(board, "X")
+       Console.announce_win("X")
     end)
     assert result == "Game Over! The winner is: X\n"
   end
