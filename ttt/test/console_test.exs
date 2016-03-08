@@ -70,11 +70,37 @@ defmodule ConsoleTest do
     IOAssert.stdout_assert(action_fn, assert_fn)
   end
 
-  test "prompt for next move" do
+  test "receives valid next move" do
+    row1 = [1, 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    board = row1 ++ row2 ++ row3
     next_move = "5"
     mark = "X"
-    action_fn = fn -> assert Console.request_next_move(mark) == next_move end
+    action_fn = fn -> assert Console.request_next_move(board, mark) == 5 end
     IOAssert.assert_with_input(next_move, action_fn)
+  end
+
+  test "receives invalid next move" do
+    row1 = [1, 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    board = row1 ++ row2 ++ row3
+    move = "0"
+    mark = "X"
+    action_fn = fn -> assert Console.validate_next_move(board, move) == :invalid end
+    IOAssert.assert_with_input(move, action_fn)
+  end
+
+  test "receives invalid move then valid move" do
+    row1 = [1, 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    board = row1 ++ row2 ++ row3
+    moves = "0\n1"
+    mark = "X"
+    action_fn = fn -> assert Console.request_next_move(board, mark) == 1 end
+    IOAssert.assert_with_input(moves, action_fn)
   end
 
   test "game is a draw announcement" do

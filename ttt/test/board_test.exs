@@ -23,6 +23,15 @@ defmodule BoardTest do
     assert TTT.Board.play_move(board, next_move, next_mark) == expected_board
   end
 
+  test "detects an invalid move" do
+    row1 = [1, 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    board = row1 ++ row2 ++ row3
+    next_move = "0"
+    assert TTT.Board.validate_move(board, next_move) == :invalid
+  end
+
   test "it knows the first player's mark" do
     row1 = [1, 2, 3]
     row2 = [4, 5, 6]
