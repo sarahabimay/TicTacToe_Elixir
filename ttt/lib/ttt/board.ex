@@ -11,7 +11,7 @@ defmodule TTT.Board do
   def next_mark_to_play(board) do
     board
     |> rows
-    |> get_move_count_per_mark
+    |> count_each_mark
     |> mark_with_fewest_moves
   end
 
@@ -60,11 +60,11 @@ defmodule TTT.Board do
     |> diagonal_marks
   end
 
-  defp get_move_count_per_mark(board) do
-      [
-        %{"X" => position_count_for_mark(board, "X")},
-        %{"O" => position_count_for_mark(board, "O")}
-      ]
+  defp count_each_mark(board) do
+    [
+      %{"X" => position_count_for_mark(board, "X")},
+      %{"O" => position_count_for_mark(board, "O")}
+    ]
   end
 
   defp position_count_for_mark(board, mark) do
@@ -103,8 +103,8 @@ defmodule TTT.Board do
     Enum.uniq(board)
   end
 
-  def mark_with_fewest_moves(move_counts_per_mark) do
-    Enum.min_by(move_counts_per_mark, fn(x) -> Map.values(x) end)
+  def mark_with_fewest_moves(mark_counts) do
+    Enum.min_by(mark_counts, fn(x) -> Map.values(x) end)
     |> Map.keys
     |> List.to_string
   end
