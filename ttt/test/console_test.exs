@@ -112,7 +112,7 @@ defmodule ConsoleTest do
     assert result == "Game Over! The game was a draw.\n"
   end
 
-  test "announceme the game was won by X" do
+  test "announce the game was won by X" do
     row1 = ["X", "O", "X"]
     row2 = ["O", "X" ,"O"]
     row3 = ["7", "8", "X" ]

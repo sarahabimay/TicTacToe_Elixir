@@ -68,10 +68,10 @@ defmodule TTT.Board do
   end
 
   defp position_count_for_mark(board, mark) do
-    Enum.reduce(board, 0, fn(row, acc) -> acc + mark_count_in_row(row, mark)  end)
+    Enum.reduce(board, 0, fn(row, acc) -> acc + count_marks(row, mark)  end)
   end
 
-  defp mark_count_in_row(row, mark) do
+  defp count_marks(row, mark) do
     Enum.count(row, fn(move) -> move == mark end)
   end
 
