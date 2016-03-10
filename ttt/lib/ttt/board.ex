@@ -53,8 +53,4 @@ defmodule TTT.Board do
     |> :math.sqrt
     |> round
   end
-
-  def zero_indexed(position) do
-    position - 1
-  end
 end
