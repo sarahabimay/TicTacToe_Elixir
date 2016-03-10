@@ -50,16 +50,6 @@ defmodule TTT.Console do
   defp request_game_type(:invalid), do: request_game_type
   defp request_game_type(game_type), do: game_type
 
-  defp request_game_type_choice do
-    request_game_type_message
-    |> display_gets
-  end
-
-  defp request_board_size_choice do
-    request_board_size_message
-    |> display_gets
-  end
-
   def request_next_move(board) do
     board
     |> next_move
@@ -111,8 +101,18 @@ defmodule TTT.Console do
     IO.ANSI.home |> IO.write
   end
 
+  defp request_game_type_choice do
+    request_game_type_message
+    |> display_gets
+  end
+
   defp request_board_size_message do
     @board_size_title <> create_options_for_display(Options.board_size_options)
+  end
+
+  defp request_board_size_choice do
+    request_board_size_message
+    |> display_gets
   end
 
   defp request_game_type_message do
