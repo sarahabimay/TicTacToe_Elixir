@@ -75,19 +75,8 @@ defmodule ConsoleTest do
     row3 = [7, 8, 9]
     board = row1 ++ row2 ++ row3
     next_move = "5"
-    mark = "X"
-    action_fn = fn -> assert Console.request_next_move(board, mark) == 5 end
+    action_fn = fn -> assert Console.request_next_move(board) == 5 end
     IOAssert.assert_with_input(next_move, action_fn)
-  end
-
-  test "receives invalid next move" do
-    row1 = [1, 2, 3]
-    row2 = [4, 5, 6]
-    row3 = [7, 8, 9]
-    board = row1 ++ row2 ++ row3
-    move = "0"
-    action_fn = fn -> assert Console.validate_next_move(board, move) == :invalid end
-    IOAssert.assert_with_input(move, action_fn)
   end
 
   test "receives invalid move then valid move" do
@@ -96,8 +85,7 @@ defmodule ConsoleTest do
     row3 = [7, 8, 9]
     board = row1 ++ row2 ++ row3
     moves = "0\n1"
-    mark = "X"
-    action_fn = fn -> assert Console.request_next_move(board, mark) == 1 end
+    action_fn = fn -> assert Console.request_next_move(board) == 1 end
     IOAssert.assert_with_input(moves, action_fn)
   end
 
@@ -113,5 +101,12 @@ defmodule ConsoleTest do
        Console.announce_win("X")
     end)
     assert result == "Game Over! The winner is: X\n"
+  end
+
+  test "clear the screen" do
+    result = capture_io(fn ->
+      Console.clear_screen
+    end)
+    assert result == "\e[2J\e[H"
   end
 end
