@@ -1,6 +1,8 @@
 defmodule TTT.Console do
   alias TTT.Options, as: Options
   alias TTT.Board, as: Board
+  alias TTT.BoardPlay, as: BoardPlay
+  alias TTT.BoardResult, as: BoardResult
   @request_move "Please enter a valid move: "
   @board_size_title "Board Size:\n"
   @game_type_title "Game Type:\n"
@@ -33,10 +35,10 @@ defmodule TTT.Console do
   end
 
   def request_next_move(board, mark, :invalid), do: request_next_move(board, mark)
-  def request_next_move(board, mark, move), do: move
+  def request_next_move(_, _, move), do: move
 
   def validate_next_move(board, move) do
-    Board.validate_move(board, move)
+    BoardPlay.validate_move(board, move)
   end
 
   def request_board_size do
@@ -75,17 +77,17 @@ defmodule TTT.Console do
     @game_type_title <> create_options_for_display(Options.game_type_options)
   end
 
-  def announce_result(false, board), do: announce_draw(board)
+  def announce_result(false, _), do: announce_draw
   def announce_result(true, board) do
-    mark = Board.winning_mark(board)
-    announce_win(board, mark)
+    mark = BoardResult.winning_mark(board)
+    announce_win(mark)
   end
 
-  def announce_draw(board) do
+  def announce_draw do
     display_puts(@draw_announcement)
   end
 
-  def announce_win(board, mark) do
+  def announce_win(mark) do
     display_puts(@win_announcement <> mark)
   end
 
