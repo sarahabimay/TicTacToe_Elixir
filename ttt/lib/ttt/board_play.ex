@@ -1,7 +1,8 @@
 defmodule TTT.BoardPlay do
   alias TTT.Board, as: Board
 
-  def play_move(board, move, mark) do
+  def play_move(board, move) do
+    mark = next_mark_to_play(board)
     List.replace_at(board, move - 1, mark)
   end
 

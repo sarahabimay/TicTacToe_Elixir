@@ -1,30 +1,31 @@
 defmodule TTT.ConsoleGame do
-  alias TTT.Console, as: Console
-  alias TTT.Board, as: Board
-  alias TTT.BoardPlay, as: BoardPlay
-  alias TTT.BoardResult, as: BoardResult
+  alias TTT.Console
+  alias TTT.Board
+  alias TTT.BoardPlay
+  alias TTT.BoardResult
+  alias TTT.PlayerFactory
 
   def start_game do
-    [board_size, _] = Console.request_options
     Console.clear_screen
-    play_game(board_size)
+    game_setup()
+    |> play_game
   end
 
-  def play_game(dimension) when is_integer(dimension) do
-    board = Board.empty_board(dimension)
+  def play_game({board, [current_player | _] = players}) when is_list(board) do
+    Console.clear_screen
     Console.display_board(board)
-    play_game(board)
+    move = current_player.next_move(board, Console)
+    new_board = BoardPlay.play_move(board, move)
+    _play_game(BoardResult.game_over?(new_board), new_board, Enum.reverse(players))
   end
 
-  def play_game(board) when is_list(board) do
-    move = Console.request_next_move(board)
-    mark = BoardPlay.next_mark_to_play(board)
-    new_board = BoardPlay.play_move(board, move, mark)
-    Console.clear_screen
-    Console.display_board(new_board)
-    _play_game(BoardResult.game_over?(new_board), new_board)
-  end
+  def _play_game(false, board, players), do: play_game({board, players})
+  def _play_game(true, board, _), do: Console.announce_result(BoardResult.found_winner?(board), board)
 
-  defp _play_game(false, board), do: play_game(board)
-  defp _play_game(true, board), do: Console.announce_result(BoardResult.found_winner?(board), board)
+  defp game_setup() do
+    [board_size, game_type] = Console.request_options
+    board = Board.empty_board(board_size)
+    players = PlayerFactory.select_players(game_type)
+    {board, players}
+  end
 end
