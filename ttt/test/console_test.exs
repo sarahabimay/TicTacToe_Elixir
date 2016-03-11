@@ -40,7 +40,7 @@ defmodule ConsoleTest do
 
   test "it receives valid game_type choice" do
     user_input = "1"
-    expected = HVH
+    expected = "HVH"
     action_fn = fn -> assert Console.request_game_type == expected end
     IOAssert.assert_with_input(user_input, action_fn)
   end
@@ -49,7 +49,7 @@ defmodule ConsoleTest do
     invalid_choice = "a"
     valid_choice = "1"
     user_input = "#{invalid_choice}\n#{valid_choice}"
-    expected_type = HVH
+    expected_type = "HVH"
     action_fn = fn -> assert Console.request_game_type == expected_type end
     IOAssert.assert_with_input(user_input, action_fn)
   end
