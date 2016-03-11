@@ -10,9 +10,8 @@ defmodule BoardPlayTest do
     board = row1 ++ row2 ++ row3
     next_move = 8
     new_row3 = [7, "X", 9]
-    next_mark = "X"
     expected_board = row1 ++ row2 ++ new_row3
-    assert BoardPlay.play_move(board, next_move, next_mark) == expected_board
+    assert BoardPlay.play_move(board, next_move) == expected_board
   end
 
   test "detects an invalid move" do

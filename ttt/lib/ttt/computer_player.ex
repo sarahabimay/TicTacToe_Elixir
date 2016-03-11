@@ -1,7 +1,7 @@
 defmodule TTT.ComputerPlayer do
   alias TTT.Board, as: Board
 
-  def next_move({board, _}) do
+  def next_move(board, _) do
     available_positions = Board.available_positions(board)
     index = random_index(available_positions)
     select_position(index, available_positions)
