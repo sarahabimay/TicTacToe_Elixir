@@ -79,8 +79,9 @@ defmodule TTT.Console do
 
   def announce_result(false, _), do: announce_draw
   def announce_result(true, board) do
-    mark = BoardResult.winning_mark(board)
-    announce_win(mark)
+    board
+    |> BoardResult.winning_mark
+    |> announce_win
   end
 
   def announce_draw do
