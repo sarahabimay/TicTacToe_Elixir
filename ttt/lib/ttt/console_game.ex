@@ -14,8 +14,7 @@ defmodule TTT.ConsoleGame do
   def play_game({board, [current_player | _] = players}) when is_list(board) do
     Console.clear_screen
     Console.display_board(board)
-    move = current_player.next_move(board, Console)
-    new_board = BoardPlay.play_move(board, move)
+    new_board = current_player.next_move(board, Console) |> BoardPlay.play_move(board)
     _play_game(BoardResult.game_over?(new_board), new_board, Enum.reverse(players))
   end
 

@@ -2,8 +2,8 @@ defmodule ConsoleGameTest do
   use ExUnit.Case
   doctest TTT
   import ExUnit.CaptureIO
-  alias TTT.ConsoleGame, as: ConsoleGame
-  alias TTT.HumanPlayer, as: HumanPlayer
+  alias TTT.ConsoleGame
+  alias TTT.HumanPlayer
 
   test "play a HVH game" do
     board_size_choice = "1"

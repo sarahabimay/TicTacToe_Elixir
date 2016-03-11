@@ -1,5 +1,5 @@
 defmodule TTT.ComputerPlayer do
-  alias TTT.Board, as: Board
+  alias TTT.Board
 
   def next_move(board, _) do
     available_positions = Board.available_positions(board)

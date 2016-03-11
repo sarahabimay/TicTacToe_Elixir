@@ -1,7 +1,7 @@
 defmodule OptionsTest do
   use ExUnit.Case
   doctest TTT
-  alias TTT.Options, as: Options
+  alias TTT.Options
 
   test "it has board size options" do
     board_size_options = ["3X3"]
@@ -13,7 +13,7 @@ defmodule OptionsTest do
                           "Human VS Human",
                           "Human VS Computer",
                           "Computer VS Human"
-                        ]
+    ]
     assert Options.game_type_options == game_type_options
   end
 
