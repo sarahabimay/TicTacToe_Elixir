@@ -2,7 +2,7 @@ defmodule ConsoleTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
   doctest TTT
-  alias TTT.Console, as: Console
+  alias TTT.Console
 
   defmodule IOAssert do
     def assert_with_input(input, action_fn) do

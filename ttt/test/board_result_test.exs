@@ -1,7 +1,7 @@
 defmodule BoardResultTest do
   use ExUnit.Case
   doctest TTT
-  alias TTT.BoardResult, as: BoardResult
+  alias TTT.BoardResult
 
   test "game is over if no positions remain" do
     row1 = ["X", "O", "X"]

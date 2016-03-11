@@ -1,7 +1,7 @@
 defmodule BoardPlayTest do
   use ExUnit.Case
   doctest TTT
-  alias TTT.BoardPlay, as: BoardPlay
+  alias TTT.BoardPlay
 
   test "it sets an X mark in a position" do
     row1 = [1, 2, 3]
@@ -11,7 +11,7 @@ defmodule BoardPlayTest do
     next_move = 8
     new_row3 = [7, "X", 9]
     expected_board = row1 ++ row2 ++ new_row3
-    assert BoardPlay.play_move(board, next_move) == expected_board
+    assert BoardPlay.play_move(next_move, board) == expected_board
   end
 
   test "detects an invalid move" do

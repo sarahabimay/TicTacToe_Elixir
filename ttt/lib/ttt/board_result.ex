@@ -1,5 +1,5 @@
 defmodule TTT.BoardResult do
-  alias TTT.Board, as: Board
+  alias TTT.Board
 
   def game_over?(board) do
     not remaining_spaces?(board) or found_winner?(board)
