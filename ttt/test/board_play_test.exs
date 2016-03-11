@@ -20,7 +20,16 @@ defmodule BoardPlayTest do
     row2 = [4, 5, 6]
     row3 = [7, 8, 9]
     board = row1 ++ row2 ++ row3
-    next_move = "0"
+    next_move = 0
+    assert BoardPlay.validate_move(board, next_move) == :invalid
+  end
+
+  test "same move cannot be played twice" do
+    row1 = ["X", 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    board = row1 ++ row2 ++ row3
+    next_move = 1
     assert BoardPlay.validate_move(board, next_move) == :invalid
   end
 

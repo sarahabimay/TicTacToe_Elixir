@@ -5,16 +5,25 @@ defmodule TTT.BoardPlay do
     List.replace_at(board, move - 1, mark)
   end
 
-  def validate_move(board, move) do
-    max_position = Enum.count(board)
-    _validate_move(Integer.parse(move), max_position)
-  end
-
   def next_mark_to_play(board) do
     board
     |> Board.rows
     |> count_each_mark
     |> mark_with_fewest_moves
+  end
+
+  def validate_move(board, move) do
+    board
+    |> Board.available_positions
+    |> _validate_move(move)
+  end
+
+  defp _validate_move(positions, move) do
+    Enum.find(positions, :invalid, is_move?(move))
+  end
+
+  defp is_move?(move) do
+    fn(x) -> x == move end
   end
 
   defp count_each_mark(board) do
@@ -24,7 +33,7 @@ defmodule TTT.BoardPlay do
     ]
   end
 
-  def mark_with_fewest_moves(mark_counts) do
+  defp mark_with_fewest_moves(mark_counts) do
     Enum.min_by(mark_counts, fn(x) -> Map.values(x) end)
     |> Map.keys
     |> List.to_string
@@ -37,8 +46,4 @@ defmodule TTT.BoardPlay do
   defp count_marks(row, mark) do
     Enum.count(row, fn(move) -> move == mark end)
   end
-
-  defp _validate_move(:error, _), do: :invalid
-  defp _validate_move({x, _}, max_position) when x > 0 and x <= max_position, do: x
-  defp _validate_move(_, _), do: :invalid
 end

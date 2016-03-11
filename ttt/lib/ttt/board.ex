@@ -1,5 +1,4 @@
 defmodule TTT.Board do
-
   def empty_board(dimension) do
     Enum.to_list(1..dimension*dimension)
   end
@@ -20,6 +19,14 @@ defmodule TTT.Board do
     |> diagonal_marks
   end
 
+  def available_positions(board) do
+    Enum.filter(board, is_empty?)
+  end
+
+  defp is_empty? do
+    fn(position) -> is_integer(position) end
+  end
+
   defp diagonal_marks(board) do
     [diagonal_values(board), diagonal_values(Enum.reverse(board))]
   end
@@ -33,16 +40,17 @@ defmodule TTT.Board do
   defp marks_in_diagonal(board_with_index) do
     Enum.map(board_with_index, fn({ row, index }) -> Enum.at(row, index) end)
   end
-  defp board_dimension(board) do
+
+  defp transpose([[]|_]), do: []
+  defp transpose(list) do
+    [Enum.map(list, &hd/1) | transpose(Enum.map(list, &tl/1))]
+  end
+
+  def board_dimension(board) do
     board
     |> List.flatten
     |> length
     |> :math.sqrt
     |> round
-  end
-
-  defp transpose([[]|_]), do: []
-  defp transpose(list) do
-    [Enum.map(list, &hd/1) | transpose(Enum.map(list, &tl/1))]
   end
 end

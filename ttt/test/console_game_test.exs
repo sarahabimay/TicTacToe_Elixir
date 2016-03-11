@@ -4,7 +4,7 @@ defmodule ConsoleGameTest do
   import ExUnit.CaptureIO
   alias TTT.ConsoleGame, as: ConsoleGame
 
-  test "play game" do
+  test "play a HVH game" do
     board_size_choice = "1"
     game_type_choice = "1"
     moves = "1\n2\n3\n4\n5\n9\n6\n7\n8"

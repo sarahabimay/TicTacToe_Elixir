@@ -30,18 +30,8 @@ defmodule TTT.Console do
     |> append_newline_to_row
   end
 
-  def request_next_move(board, mark) do
-    request_next_move(board, mark, validate_next_move(board, display_gets("Player #{mark}, #{@request_move}")))
-  end
-
-  def request_next_move(board, mark, :invalid), do: request_next_move(board, mark)
-  def request_next_move(_, _, move), do: move
-
-  def validate_next_move(board, move) do
-    BoardPlay.validate_move(board, move)
-  end
-
   def request_board_size do
+    clear_screen
     request_board_size_choice
     |> Options.lookup_board_size
     |> request_board_size
@@ -51,6 +41,7 @@ defmodule TTT.Console do
   defp request_board_size(board_size), do: board_size
 
   def request_game_type do
+    clear_screen
     request_game_type_choice
     |> Options.lookup_game_type
     |> request_game_type
@@ -59,22 +50,35 @@ defmodule TTT.Console do
   defp request_game_type(:invalid), do: request_game_type
   defp request_game_type(game_type), do: game_type
 
-  defp request_board_size_choice do
-    request_board_size_message
+  def request_next_move(board) do
+    board
+    |> next_move
+    |> convert_to_integer
+    |> validate_next_move(board)
+  end
+
+  defp request_next_move(:invalid, board), do: request_next_move(board)
+  defp request_next_move(move, _), do: move
+
+  defp validate_next_move(:invalid, board) do
+    request_next_move(board)
+  end
+
+  defp validate_next_move(move, board) do
+    board
+    |> BoardPlay.validate_move(move)
+    |> request_next_move(board)
+  end
+
+  defp next_move(board) do
+    board
+    |> next_move_message
     |> display_gets
   end
 
-  defp request_board_size_message do
-    @board_size_title <> create_options_for_display(Options.board_size_options)
-  end
-
-  defp request_game_type_choice do
-    request_game_type_message
-    |> display_gets
-  end
-
-  defp request_game_type_message do
-    @game_type_title <> create_options_for_display(Options.game_type_options)
+  defp next_move_message(board) do
+    mark = BoardPlay.next_mark_to_play(board)
+    "Player #{mark}, #{@request_move}"
   end
 
   def announce_result(false, _), do: announce_draw
@@ -90,6 +94,29 @@ defmodule TTT.Console do
 
   def announce_win(mark) do
     display_puts(@win_announcement <> mark)
+  end
+
+  def clear_screen do
+    IO.ANSI.clear |> IO.write
+    IO.ANSI.home |> IO.write
+  end
+
+  defp request_game_type_choice do
+    request_game_type_message
+    |> display_gets
+  end
+
+  defp request_board_size_message do
+    @board_size_title <> create_options_for_display(Options.board_size_options)
+  end
+
+  defp request_board_size_choice do
+    request_board_size_message
+    |> display_gets
+  end
+
+  defp request_game_type_message do
+    @game_type_title <> create_options_for_display(Options.game_type_options)
   end
 
   defp intersperse_column_divider(board) do
@@ -133,4 +160,11 @@ defmodule TTT.Console do
   defp display_gets(message) do
     String.strip(IO.gets(message))
   end
+
+  defp convert_to_integer(move) do
+    _convert(Integer.parse(move))
+  end
+
+  defp _convert(:error), do: :invalid
+  defp _convert({x, _}), do: x
 end
