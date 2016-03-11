@@ -93,9 +93,7 @@ defmodule TTT.Console do
   end
 
   defp intersperse_column_divider(board) do
-    Enum.map(board, fn(row) ->
-      Enum.join(row, @column_divider)
-    end)
+    Enum.map(board, fn(row) -> Enum.join(row, @column_divider) end)
   end
 
   defp intersperse_row_divider(board) do
@@ -115,13 +113,17 @@ defmodule TTT.Console do
     options
     |> one_indexed
     |> Enum.reverse
-    |> Enum.reduce("", fn({element, index}, acc) -> "[#{index}] #{element}\n#{acc}" end)
+    |> options_for_display
   end
 
   defp one_indexed(options) do
     options
     |> Enum.with_index
     |> Enum.map(fn({element, index}) -> {element, index+1} end)
+  end
+
+  defp options_for_display(options) do
+    Enum.reduce(options, "", fn({option, index}, acc) -> "[#{index}] #{option}\n#{acc}" end)
   end
 
   defp display_puts(message) do
