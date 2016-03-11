@@ -8,42 +8,46 @@ defmodule OptionsTest do
     assert Options.board_size_options == board_size_options
   end
 
-  test "it has game_type options" do
-    game_type_options = ["Human VS Human"]
+  test "it has hvh, hvc and cvh game_type options" do
+    game_type_options = [
+                          "Human VS Human",
+                          "Human VS Computer",
+                          "Computer VS Human"
+                        ]
     assert Options.game_type_options == game_type_options
   end
 
-  test "1 is a valid choice for board_size" do
-    option = "1"
-    expected = 1
-    assert Options.validate_board_size_option(option) == expected
-  end
-
-  test "invalid choice for board_size" do
-    option = "a"
-    assert Options.validate_board_size_option(option) == :invalid
-  end
-
-  test "1 is a valid choice for game_type" do
-    option = "1"
-    expected = 1
-    assert Options.validate_game_type_option(option) == expected
-  end
-
-  test "invalid choice for game_type" do
-    option = "a"
-    assert Options.validate_game_type_option(option) == :invalid
-  end
-
-  test "lookup 3x3 board size based on choice" do
+  test "valid board size chosen" do
     choice = "1"
     expected_size = 3
     assert Options.lookup_board_size(choice) == expected_size
   end
 
-  test "lookup HVH game type based on choice" do
-    choice = "1"
-    expected_type = HVH
+  test "invalid board_size chosen" do
+    option = "a"
+    assert Options.lookup_game_type(option) == :invalid
+  end
+
+  test "valid HVH game_type chosen" do
+    option = "1"
+    expected = "HVH"
+    assert Options.lookup_game_type(option) == expected
+  end
+
+  test "invalid game_type chosen" do
+    option = "a"
+    assert Options.lookup_game_type(option) == :invalid
+  end
+
+  test "valid HVC game_type chosen" do
+    choice = "2"
+    expected_type = "HVC"
+    assert Options.lookup_game_type(choice) == expected_type
+  end
+
+  test "valid CVH game_type chosen" do
+    choice = "3"
+    expected_type = "CVH"
     assert Options.lookup_game_type(choice) == expected_type
   end
 end

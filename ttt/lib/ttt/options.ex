@@ -1,38 +1,40 @@
 defmodule TTT.Options do
-  @board_sizes  %{3 => "3X3"}
-  @game_types %{HVH => "Human VS Human"}
+  @board_sizes  %{
+      1 => %{ 3 => "3X3" }
+  }
+  @game_types %{
+      1 => %{ "HVH" => "Human VS Human"},
+      2 => %{ "HVC" => "Human VS Computer"},
+      3 => %{ "CVH" => "Computer VS Human"}
+   }
 
   def board_size_options do
-    Map.values(@board_sizes)
+    option_labels(@board_sizes)
   end
 
   def game_type_options do
-    Map.values(@game_types)
+    option_labels(@game_types)
   end
 
   def lookup_board_size(:invalid), do: :invalid
 
   def lookup_board_size(index) do
-    validate_board_size_option(index)
+    validate_option(@board_sizes, index)
     |> lookup_option(@board_sizes)
   end
 
   def lookup_game_type(index) do
-    validate_game_type_option(index)
+    validate_option(@game_types, index)
     |> lookup_option(@game_types)
   end
 
   def lookup_option(:invalid, _), do: :invalid
-  def lookup_option(option_choice, options_list) do
-    Enum.at(Map.keys(options_list), option_choice - 1)
+  def lookup_option(choice, options_list) do
+    List.first(Map.keys(options_list[choice]))
   end
 
   def validate_board_size_option(option) do
     validate_option(@board_sizes, option)
-  end
-
-  def validate_game_type_option(option) do
-    validate_option(@game_types, option)
   end
 
   defp validate_option(options, option) do
@@ -43,4 +45,15 @@ defmodule TTT.Options do
   defp _validate_option(:error, _), do: :invalid
   defp _validate_option({x, _}, number_of_options) when x > 0 and x <= number_of_options, do: x
   defp _validate_option(_, _), do: :invalid
+
+  defp option_labels(options) do
+    options
+    |> Map.values
+    |> Enum.map(fn(option) -> Map.values(option) end)
+    |> List.flatten
+  end
+
+  defp zero_index(choice) do
+    choice - 1
+  end
 end
