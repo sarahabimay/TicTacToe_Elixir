@@ -23,7 +23,7 @@ defmodule TTT.Board do
     Enum.filter(board, is_empty?)
   end
 
-  defp is_empty? do
+  defp is_empty?() do
     fn(position) -> is_integer(position) end
   end
 
