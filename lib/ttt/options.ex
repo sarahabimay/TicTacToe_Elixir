@@ -8,11 +8,11 @@ defmodule TTT.Options do
       3 => %{ "CVH" => "Computer VS Human"}
    }
 
-  def board_size_options do
+  def board_size_options() do
     option_labels(@board_sizes)
   end
 
-  def game_type_options do
+  def game_type_options() do
     option_labels(@game_types)
   end
 
@@ -51,9 +51,5 @@ defmodule TTT.Options do
     |> Map.values
     |> Enum.map(fn(option) -> Map.values(option) end)
     |> List.flatten
-  end
-
-  defp zero_index(choice) do
-    choice - 1
   end
 end

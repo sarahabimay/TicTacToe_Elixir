@@ -5,14 +5,13 @@ defmodule TTT.ConsoleGame do
   alias TTT.BoardResult
   alias TTT.PlayerFactory
 
-  def start_game do
-    Console.clear_screen
+  def start_game() do
+    Console.clear_screen()
     game_setup()
     |> play_game
   end
 
   def play_game({board, [current_player | _] = players}) when is_list(board) do
-    Console.clear_screen
     Console.display_board(board)
     new_board = current_player.next_move(board, Console) |> BoardPlay.play_move(board)
     _play_game(BoardResult.game_over?(new_board), new_board, Enum.reverse(players))
