@@ -5,22 +5,18 @@ defmodule TTT.PromptReader do
   alias TTT.Options
 
   def request_board_size() do
-    request_board_size_choice()
+    request_board_size_message()
+    |> display_gets
     |> Options.lookup_board_size
     |> request_board_size
   end
 
-  defp request_board_size(:invalid), do: request_board_size()
-  defp request_board_size(board_size), do: board_size
-
   def request_game_type() do
-    request_game_type_choice()
+    request_game_type_message()
+    |> display_gets
     |> Options.lookup_game_type
     |> request_game_type
   end
-
-  defp request_game_type(:invalid), do: request_game_type()
-  defp request_game_type(game_type), do: game_type
 
   def request_next_move(board) do
     board
@@ -28,6 +24,19 @@ defmodule TTT.PromptReader do
     |> convert_to_integer
     |> validate_next_move(board)
   end
+
+  def play_again_option() do
+    Messages.replay_option()
+    |> display_gets()
+    |> convert_to_integer
+    |> validate_yes_no
+  end
+
+  defp request_board_size(:invalid), do: request_board_size()
+  defp request_board_size(board_size), do: board_size
+
+  defp request_game_type(:invalid), do: request_game_type()
+  defp request_game_type(game_type), do: game_type
 
   defp request_next_move(:invalid, board), do: request_next_move(board)
   defp request_next_move(move, _), do: move
@@ -54,15 +63,9 @@ defmodule TTT.PromptReader do
     |> request_next_move(board)
   end
 
-  defp request_game_type_choice() do
-    request_game_type_message()
-    |> display_gets
-  end
+  defp validate_yes_no(choice) when choice == 1 or choice == 2, do: choice
 
-  defp request_board_size_choice() do
-    request_board_size_message()
-    |> display_gets
-  end
+  defp validate_yes_no(_), do: play_again_option()
 
   defp request_board_size_message() do
     Messages.board_size_title() <> OptionsDisplay.board_size_options()

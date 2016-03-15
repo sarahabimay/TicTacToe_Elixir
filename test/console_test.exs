@@ -32,7 +32,7 @@ defmodule ConsoleTest do
   test "it receives valid board size choice" do
     user_input = "1"
     expected_size = 3
-    action_fn = fn -> assert Console.request_board_size == expected_size end
+    action_fn = fn -> assert Console.request_board_size() == expected_size end
     IOAssert.assert_with_input(user_input, action_fn)
   end
 
@@ -41,14 +41,14 @@ defmodule ConsoleTest do
     valid_choice = "1"
     user_input = "#{invalid_choice}\n#{valid_choice}"
     expected_size = 3
-    action_fn = fn -> assert Console.request_board_size == expected_size end
+    action_fn = fn -> assert Console.request_board_size() == expected_size end
     IOAssert.assert_with_input(user_input, action_fn)
   end
 
   test "it receives valid game_type choice" do
     user_input = "1"
     expected = "HVH"
-    action_fn = fn -> assert Console.request_game_type == expected end
+    action_fn = fn -> assert Console.request_game_type() == expected end
     IOAssert.assert_with_input(user_input, action_fn)
   end
 
@@ -57,7 +57,7 @@ defmodule ConsoleTest do
     valid_choice = "1"
     user_input = "#{invalid_choice}\n#{valid_choice}"
     expected_type = "HVH"
-    action_fn = fn -> assert Console.request_game_type == expected_type end
+    action_fn = fn -> assert Console.request_game_type() == expected_type end
     IOAssert.assert_with_input(user_input, action_fn)
   end
 
@@ -98,7 +98,7 @@ defmodule ConsoleTest do
 
   test "game is a draw announcement" do
     result = capture_io(fn ->
-       PromptWriter.announce_draw
+       PromptWriter.announce_draw()
     end)
     assert result == "Game Over! The game was a draw.\n"
   end
@@ -110,10 +110,30 @@ defmodule ConsoleTest do
     assert result == "Game Over! The winner is: X\n"
   end
 
+  test "display closing down message" do
+    result = capture_io(fn ->
+       PromptWriter.closing_down_message()
+    end)
+    assert result == "Goodbye and Thanks for playing!\n"
+  end
+
   test "clear the screen" do
     result = capture_io(fn ->
-      Console.clear_screen
+      Console.clear_screen()
     end)
     assert result == "\e[2J\e[H"
+  end
+
+  test "valid replay game choice" do
+    yes_input = "1"
+    expected = 1
+    action_fn = fn -> assert Console.play_again_option() == expected end
+    IOAssert.assert_with_input(yes_input, action_fn)
+  end
+
+  test "keep requesting replay choice until valid" do
+    input = "3\na\n0\n1\n"
+    action_fn = fn -> assert Console.play_again_option() == 1 end
+    IOAssert.assert_with_input(input, action_fn)
   end
 end

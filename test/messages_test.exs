@@ -28,4 +28,14 @@ defmodule MessagesTest do
     message = "Game Over! The winner is: "
     assert Messages.win_announcement == message
   end
+
+  test "replay game option" do
+    message = "Do you want to play again?\n[1] Yes\n[2] No\n"
+    assert Messages.replay_option == message
+  end
+
+  test "closing down message" do
+    message = "Goodbye and Thanks for playing!"
+    assert Messages.closing_down_message == message
+  end
 end

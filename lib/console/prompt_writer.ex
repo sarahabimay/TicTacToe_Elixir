@@ -16,6 +16,8 @@ defmodule TTT.PromptWriter do
 
   def announce_win(mark), do: display_puts(Messages.win_announcement() <> mark)
 
+  def closing_down_message(), do: display_puts(Messages.closing_down_message())
+
   def format_board_for_display(board) do
     board
     |> Board.rows
