@@ -1,6 +1,7 @@
 defmodule TTT.Board do
-  def empty_board(dimension) do
-    Enum.to_list(1..dimension*dimension)
+  @three_by_three 3
+  def empty_board() do
+    Enum.to_list(1..@three_by_three*@three_by_three)
   end
 
   def rows(board) do

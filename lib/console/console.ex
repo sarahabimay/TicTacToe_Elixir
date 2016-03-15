@@ -32,8 +32,8 @@ defmodule TTT.Console do
   def play_again_option(), do: PromptReader.play_again_option()
 
   def closing_down_message(), do: PromptWriter.closing_down_message()
+
   def clear_screen() do
-    IO.ANSI.clear |> IO.write
-    IO.ANSI.home |> IO.write
+    PromptWriter.clear_screen()
   end
 end

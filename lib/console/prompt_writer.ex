@@ -26,6 +26,10 @@ defmodule TTT.PromptWriter do
     |> append_newline_to_row
   end
 
+  def clear_screen() do
+    IO.ANSI.clear |> IO.write
+    IO.ANSI.home |> IO.write
+  end
 
   defp intersperse_column_divider(board) do
     Enum.map(board, fn(row) -> Enum.join(row, @column_divider) end)
