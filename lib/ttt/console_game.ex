@@ -4,14 +4,14 @@ defmodule TTT.ConsoleGame do
   alias TTT.BoardResult
   alias TTT.PlayerFactory
 
-  def restart_game(false, display), do: display.closing_down_message()
-  def restart_game(true, display), do: start_game(Board.empty_board, display)
-
   def start_game(board, display) do
     display.clear_screen()
     game_setup(board, display)
     |> play_game
   end
+
+  def restart_game(false, display), do: display.closing_down_message()
+  def restart_game(true, display), do: start_game(Board.empty_board, display)
 
   def play_game({board, display, [current_player | _] = players}) when is_list(board) do
     display.display_board(board)
@@ -19,14 +19,14 @@ defmodule TTT.ConsoleGame do
     _play_game(BoardResult.game_over?(new_board), new_board, display, Enum.reverse(players))
   end
 
-  def _play_game(false, board, display, players), do: play_game({board, display, players})
-  def _play_game(true, board, display, _) do
+  defp _play_game(false, board, display, players), do: play_game({board, display, players})
+  defp _play_game(true, board, display, _) do
     display.display_board(board)
     display_result(board, display)
     restart_game(play_again?(display.play_again_option()), display)
   end
 
-  def display_result(board, display) do
+  defp display_result(board, display) do
     board
     |> BoardResult.found_winner?
     |> display.announce_result(board)

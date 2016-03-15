@@ -6,7 +6,7 @@ defmodule TTT.BoardDisplay do
     |> append_newline
   end
 
-  def format_board(board) do
+  defp format_board(board) do
     board
     |> Board.rows
     |> intersperse_column_divider
