@@ -3,6 +3,8 @@ defmodule ConsoleTest do
   import ExUnit.CaptureIO
   doctest TTT
   alias TTT.Console
+  alias TTT.PromptWriter
+  alias TTT.OptionsDisplay
 
   defmodule IOAssert do
     def assert_with_input(input, action_fn) do
@@ -16,9 +18,14 @@ defmodule ConsoleTest do
   end
 
   test "board size options request" do
-    board_sizes = ["3X3", "4X4"]
-    expected = "[1] 3X3\n[2] 4X4\n"
-    result = Console.create_options_for_display(board_sizes)
+    expected = "[1] 3X3\n"
+    result = OptionsDisplay.board_size_options()
+    assert result == expected
+  end
+
+  test "game_type options request" do
+     expected = "[1] Human VS Human\n[2] Human VS Computer\n[3] Computer VS Human\n"
+      result = OptionsDisplay.game_type_options()
     assert result == expected
   end
 
@@ -91,14 +98,14 @@ defmodule ConsoleTest do
 
   test "game is a draw announcement" do
     result = capture_io(fn ->
-       Console.announce_draw
+       PromptWriter.announce_draw
     end)
     assert result == "Game Over! The game was a draw.\n"
   end
 
   test "announce the game was won by X" do
     result = capture_io(fn ->
-       Console.announce_win("X")
+       PromptWriter.announce_win("X")
     end)
     assert result == "Game Over! The winner is: X\n"
   end
