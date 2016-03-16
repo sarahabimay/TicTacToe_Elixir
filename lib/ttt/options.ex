@@ -1,6 +1,7 @@
 defmodule TTT.Options do
   @board_sizes  %{
-      1 => %{ 3 => "3X3" }
+      1 => %{ 3 => "3X3" },
+      2 => %{ 4 => "4X4" }
   }
   @game_types %{
       1 => %{ "HVH" => "Human VS Human"},

@@ -32,7 +32,8 @@ defmodule ConsoleTest do
   end
 
   test "receives next move" do
-    board = Board.empty_board()
+    dimension = 3
+    board = Board.empty_board(dimension)
     next_move = "5"
     action_fn = fn -> assert Console.request_next_move(board) == 5 end
     IOAssert.assert_with_input(next_move, action_fn)
@@ -46,7 +47,8 @@ defmodule ConsoleTest do
   end
 
   test "it displays a board" do
-    empty_board = Board.empty_board()
+    dimension = 3
+    empty_board = Board.empty_board(dimension)
     expected_display_board = BoardDisplay.formatted_board(empty_board)
     result = capture_io(fn -> Console.display_board(empty_board) end)
     assert String.contains?(result, expected_display_board)

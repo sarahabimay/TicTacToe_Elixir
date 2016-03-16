@@ -44,14 +44,16 @@ defmodule PromptReaderTest do
   end
 
   test "receives valid next move" do
-    board = Board.empty_board()
+    dimension = 3
+    board = Board.empty_board(dimension)
     next_move = "5"
     action_fn = fn -> assert Console.request_next_move(board) == 5 end
     IOAssert.assert_with_input(next_move, action_fn)
   end
 
   test "receives invalid move" do
-    board = Board.empty_board()
+    dimension = 3
+    board = Board.empty_board(dimension)
     moves = "0\n1"
     action_fn = fn -> assert Console.request_next_move(board) == 1 end
     IOAssert.assert_with_input(moves, action_fn)

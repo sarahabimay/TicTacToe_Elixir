@@ -8,7 +8,18 @@ defmodule BoardTest do
     row2 = [4, 5, 6]
     row3 = [7, 8, 9]
     expected_board = row1 ++ row2 ++ row3
-    assert Board.empty_board() == expected_board
+    dimension = 3
+    assert Board.empty_board(dimension) == expected_board
+  end
+
+  test "it returns an empty 4x4 board" do
+    row1 = [1,  2,  3,  4]
+    row2 = [5,  6,  7,  8]
+    row3 = [9, 10, 11, 12]
+    row4 = [13,14, 15, 16]
+    expected_board = row1 ++ row2 ++ row3 ++ row4
+    dimension = 4
+    assert Board.empty_board(dimension) == expected_board
   end
 
   test "the rows can be extracted from board" do

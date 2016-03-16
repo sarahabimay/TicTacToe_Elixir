@@ -4,7 +4,7 @@ defmodule OptionsTest do
   alias TTT.Options
 
   test "it has board size options" do
-    board_size_options = ["3X3"]
+    board_size_options = ["3X3", "4X4"]
     assert Options.board_size_options == board_size_options
   end
 
@@ -17,9 +17,15 @@ defmodule OptionsTest do
     assert Options.game_type_options == game_type_options
   end
 
-  test "valid board size chosen" do
+  test "3X3 board size chosen" do
     choice = "1"
     expected_size = 3
+    assert Options.lookup_board_size(choice) == expected_size
+  end
+
+  test "4X4 board size chosen" do
+    choice = "2"
+    expected_size = 4
     assert Options.lookup_board_size(choice) == expected_size
   end
 
