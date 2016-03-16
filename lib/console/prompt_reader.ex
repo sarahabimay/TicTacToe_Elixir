@@ -53,9 +53,7 @@ defmodule TTT.PromptReader do
     |> Messages.request_move_for_mark
   end
 
-  defp validate_next_move(:invalid, board) do
-    request_next_move(board)
-  end
+  defp validate_next_move(:invalid, board), do: request_next_move(board)
 
   defp validate_next_move(move, board) do
     board
@@ -75,13 +73,9 @@ defmodule TTT.PromptReader do
     Messages.game_type_title() <> OptionsDisplay.game_type_options()
   end
 
-  defp display_gets(message) do
-    String.strip(IO.gets(message))
-  end
+  defp display_gets(message), do: String.strip(IO.gets(message))
 
-  defp convert_to_integer(move) do
-    convert(Integer.parse(move))
-  end
+  defp convert_to_integer(move), do: convert(Integer.parse(move))
 
   defp convert(:error), do: :invalid
   defp convert({x, _}), do: x

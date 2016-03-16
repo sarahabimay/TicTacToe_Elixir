@@ -91,7 +91,7 @@ defmodule ConsoleGameTest do
     game_type_choice = "1"
     moves = "1\n2\n3\n4\n5\n6\n7"
     play_again_no = "2"
-    expected_announcement =  "Game Over! The winner is: "
+    expected_announcement =  "Game Over!"
     result = capture_io([input: "#{game_type_choice}\n#{moves}\n#{play_again_no}\n"], fn ->
       ConsoleGame.start_game(TTT.Board.empty_board(), TTT.Console)
     end)
