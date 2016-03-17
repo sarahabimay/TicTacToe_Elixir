@@ -43,7 +43,8 @@ defmodule ConsoleGameTest do
     row2 = ["O", "X", "O"]
     row3 = [7, 8, 9]
     board = row1 ++ row2 ++ row3
-    ConsoleGame.start_game(board, FakeDisplay)
+    players = [HumanPlayer, HumanPlayer]
+    ConsoleGame.play_game({board, FakeDisplay, players})
     assert_received "Goodbye"
   end
 
@@ -93,7 +94,20 @@ defmodule ConsoleGameTest do
     play_again_no = "2"
     expected_announcement =  "Game Over!"
     result = capture_io([input: "#{game_type_choice}\n#{moves}\n#{play_again_no}\n"], fn ->
-      ConsoleGame.start_game(TTT.Board.empty_board(), TTT.Console)
+      ConsoleGame.start_game(TTT.Board, TTT.Console)
+    end)
+    assert String.contains?(result, expected_announcement)
+  end
+
+  test "play two HVH games" do
+    game_type_choice = "1\n"
+    moves = "1\n2\n3\n4\n5\n6\n7\n"
+    play_again_yes = "1\n"
+    play_again_no = "2\n"
+    expected_announcement =  "Game Over!"
+    input = game_type_choice <> moves <> play_again_yes <> moves <> play_again_no
+    result = capture_io([input: input], fn ->
+      ConsoleGame.start_game(TTT.Board, TTT.Console)
     end)
     assert String.contains?(result, expected_announcement)
   end

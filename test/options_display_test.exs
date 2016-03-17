@@ -4,7 +4,7 @@ defmodule OptionsDisplayTest do
   alias TTT.OptionsDisplay
 
   test "board size options are formatted correctly" do
-    expected = "[1] 3X3\n"
+    expected = "[1] 3X3\n[2] 4X4\n"
     result = OptionsDisplay.board_size_options()
     assert result == expected
   end

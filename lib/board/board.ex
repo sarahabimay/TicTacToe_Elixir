@@ -1,7 +1,6 @@
 defmodule TTT.Board do
-  @three_by_three 3
-  def empty_board() do
-    Enum.to_list(1..@three_by_three*@three_by_three)
+  def empty_board(dimension) do
+    Enum.to_list(1..dimension*dimension)
   end
 
   def rows(board) do
@@ -22,6 +21,18 @@ defmodule TTT.Board do
 
   def available_positions(board) do
     Enum.filter(board, is_empty?)
+  end
+
+  def board_dimension(board) do
+    board
+    |> List.flatten
+    |> cell_count
+    |> :math.sqrt
+    |> round
+  end
+
+  def cell_count(board) do
+    length(board)
   end
 
   defp is_empty?() do
@@ -47,11 +58,4 @@ defmodule TTT.Board do
     [Enum.map(list, &hd/1) | transpose(Enum.map(list, &tl/1))]
   end
 
-  def board_dimension(board) do
-    board
-    |> List.flatten
-    |> length
-    |> :math.sqrt
-    |> round
-  end
 end

@@ -7,7 +7,8 @@ defmodule PromptWriterTest do
   alias TTT.BoardDisplay
 
   test "it displays HVH game with 3x3 board" do
-    empty_board = Board.empty_board()
+    dimension = 3
+    empty_board = Board.empty_board(dimension)
     expected_display_board = BoardDisplay.formatted_board(empty_board)
     result = capture_io(fn -> PromptWriter.display_board(empty_board) end)
     assert String.contains?(result, expected_display_board)

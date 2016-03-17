@@ -11,7 +11,7 @@ defmodule TTT.ConsoleGame do
   end
 
   def restart_game(false, display), do: display.closing_down_message()
-  def restart_game(true, display), do: start_game(Board.empty_board, display)
+  def restart_game(true, display), do: start_game(Board, display)
 
   def play_game({board, display, [current_player | _] = players}) when is_list(board) do
     display.display_board(board)
@@ -42,8 +42,14 @@ defmodule TTT.ConsoleGame do
   defp play_again?(choice) when choice == 2, do: false
 
   defp game_setup(board, display) do
+    new_board = choose_board(board, display)
     players = choose_players(display)
-    {board, display, players}
+    {new_board, display, players}
+  end
+
+  defp choose_board(board, display) do
+    display.request_board_size()
+    |> board.empty_board
   end
 
   defp choose_players(display) do
