@@ -1,4 +1,4 @@
-defmodule TTT.ComputerPlayer do
+defmodule TTT.BeatablePlayer do
   alias TTT.Board
 
   def next_move(board, _) do

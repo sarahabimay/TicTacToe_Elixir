@@ -3,6 +3,14 @@ defmodule BoardResultTest do
   doctest TTT
   alias TTT.BoardResult
 
+  test "no winner found" do
+    row1 = [1, 2, 3]
+    row2 = [4, 5, 6]
+    row3 = [7, 8, 9]
+    board = row1 ++ row2 ++ row3
+    assert BoardResult.found_winner?(board) == false
+  end
+
   test "game is over if no positions remain" do
     row1 = ["X", "O", "X"]
     row2 = ["O", "X" ,"X"]
