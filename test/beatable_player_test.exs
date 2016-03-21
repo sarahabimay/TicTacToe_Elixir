@@ -1,4 +1,4 @@
-defmodule ComputerPlayerTest do
+defmodule BeatablePlayerTest do
   use ExUnit.Case
   doctest TTT
 
@@ -10,6 +10,6 @@ defmodule ComputerPlayerTest do
     row2 = ["O", "X" ,"X"]
     row3 = ["O", 8, "O"]
     board = row1 ++ row2 ++ row3
-    assert TTT.ComputerPlayer.next_move(board, Console) == next_move
+    assert TTT.BeatablePlayer.next_move(board, Console) == next_move
   end
 end

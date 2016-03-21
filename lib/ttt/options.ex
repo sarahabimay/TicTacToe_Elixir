@@ -5,8 +5,10 @@ defmodule TTT.Options do
   }
   @game_types %{
       1 => %{ "HVH" => "Human VS Human"},
-      2 => %{ "HVC" => "Human VS Computer"},
-      3 => %{ "CVH" => "Computer VS Human"}
+      2 => %{ "HVB" => "Human VS Beatable"},
+      3 => %{ "BVH" => "Beatable VS Human"},
+      4 => %{ "HVU" => "Human VS Unbeatable"},
+      5 => %{ "UVH" => "Unbeatable VS Human"}
    }
 
   def board_size_options() do

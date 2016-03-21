@@ -31,7 +31,7 @@ defmodule TTT.BoardResult do
     |> List.first
   end
 
-  def remaining_spaces?(board) do
+  defp remaining_spaces?(board) do
     board
     |> unique_elements
     |> Enum.any?(fn(elem) -> is_integer(elem) end)

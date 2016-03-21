@@ -3,7 +3,8 @@ defmodule TTT.UnbeatablePlayer do
   alias TTT.BoardPlay
   alias TTT.BoardResult
 
-  def next_move(ai_mark, board, _) do
+  def next_move(board, _) do
+    ai_mark = TTT.BoardPlay.next_mark_to_play(board)
     [_, move] = minimax(length(Board.available_positions(board)), board, ai_mark, ai_mark, -10000000, 10000000)
     move
   end

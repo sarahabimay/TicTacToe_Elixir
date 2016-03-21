@@ -8,11 +8,13 @@ defmodule OptionsTest do
     assert Options.board_size_options == board_size_options
   end
 
-  test "it has hvh, hvc and cvh game_type options" do
+  test "it has all game_type options" do
     game_type_options = [
                           "Human VS Human",
-                          "Human VS Computer",
-                          "Computer VS Human"
+                          "Human VS Beatable",
+                          "Beatable VS Human",
+                          "Human VS Unbeatable",
+                          "Unbeatable VS Human",
     ]
     assert Options.game_type_options == game_type_options
   end
@@ -45,15 +47,27 @@ defmodule OptionsTest do
     assert Options.lookup_game_type(option) == :invalid
   end
 
-  test "valid HVC game_type chosen" do
+  test "valid HVB game_type chosen" do
     choice = "2"
-    expected_type = "HVC"
+    expected_type = "HVB"
     assert Options.lookup_game_type(choice) == expected_type
   end
 
-  test "valid CVH game_type chosen" do
+  test "valid BVH game_type chosen" do
     choice = "3"
-    expected_type = "CVH"
+    expected_type = "BVH"
+    assert Options.lookup_game_type(choice) == expected_type
+  end
+
+  test "valid HVU game_type chosen" do
+    choice = "4"
+    expected_type = "HVU"
+    assert Options.lookup_game_type(choice) == expected_type
+  end
+
+  test "valid UVH game_type chosen" do
+    choice = "5"
+    expected_type = "UVH"
     assert Options.lookup_game_type(choice) == expected_type
   end
 end

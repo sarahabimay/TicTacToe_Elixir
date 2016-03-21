@@ -4,7 +4,7 @@ defmodule ConsoleGameTest do
   import ExUnit.CaptureIO
   alias TTT.ConsoleGame
   alias TTT.HumanPlayer
-  alias TTT.ComputerPlayer
+  alias TTT.BeatablePlayer
 
   defmodule FakeDisplay do
     require Logger
@@ -53,7 +53,7 @@ defmodule ConsoleGameTest do
     row2 = ["O", "X", "O"]
     row3 = [7, 8, 9]
     board = row1 ++ row2 ++ row3
-    players = [ComputerPlayer, HumanPlayer]
+    players = [BeatablePlayer, HumanPlayer]
     ConsoleGame.play_game({board, FakeDisplay, players})
     assert_received "Goodbye"
   end
