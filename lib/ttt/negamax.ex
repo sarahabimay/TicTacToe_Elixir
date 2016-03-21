@@ -29,11 +29,11 @@ defmodule TTT.Negamax do
   end
 
   defp traverse_branch(board, next_move, current_best, depth) do
-    if current_best[:alpha] >= current_best[:beta] do
+    if prunable?(current_best) do
       current_best
     else
-      result = negate(negamax(depth - 1, board, -current_best[:beta], -current_best[:alpha]))
-      if result[:best_score] > current_best[:alpha] do
+      result = negate_score(negamax(depth - 1, board, -current_best[:beta], -current_best[:alpha]))
+      if found_better_score?(result, current_best) do
         %{
           :best_score => result[:best_score] ,
           :best_move => next_move,
@@ -46,7 +46,15 @@ defmodule TTT.Negamax do
     end
   end
 
-  defp negate(result) do
+  defp found_better_score?(new_score, old_score) do
+    new_score[:best_score] > old_score[:alpha]
+  end
+
+  defp prunable?(current_best) do
+    current_best[:alpha] >= current_best[:beta]
+  end
+
+  defp negate_score(result) do
     %{:best_score => -result[:best_score], :best_move => result[:best_move]}
   end
 
