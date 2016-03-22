@@ -40,10 +40,10 @@ defmodule BoardTest do
   end
 
   def expected_board(4) do
-    row1 = [1,  2,  3,  4]
-    row2 = [5,  6,  7,  8]
-    row3 = [9, 10, 11, 12]
-    row4 = [13,14, 15, 16]
+    row1 = [  1,  2,  3,  4]
+    row2 = [  5,  6,  7,  8]
+    row3 = [  9, 10, 11, 12]
+    row4 = [ 13, 14, 15, 16]
     row1 ++ row2 ++ row3 ++ row4
   end
 end
