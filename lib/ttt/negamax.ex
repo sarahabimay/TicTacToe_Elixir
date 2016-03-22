@@ -14,18 +14,9 @@ defmodule TTT.Negamax do
       |> Enum.reduce(result_accumulator(alpha, beta), fn(move, acc) ->
         move
         |> BoardPlay.play_move(current_board)
-        |> traverse_branch(move, acc, depth )
+        |> traverse_branch(move, acc, depth)
       end)
     end
-  end
-
-  defp result_accumulator(alpha, beta) do
-    %{
-      :best_score => -@initial_score,
-      :best_move => @initial_move,
-      :alpha => alpha,
-      :beta => beta,
-    }
   end
 
   defp traverse_branch(board, next_move, current_best, depth) do
@@ -44,6 +35,15 @@ defmodule TTT.Negamax do
         current_best
       end
     end
+  end
+
+  defp result_accumulator(alpha, beta) do
+    %{
+      :best_score => -@initial_score,
+      :best_move => @initial_move,
+      :alpha => alpha,
+      :beta => beta,
+    }
   end
 
   defp found_better_score?(new_score, old_score) do
