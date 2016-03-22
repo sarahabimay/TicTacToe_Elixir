@@ -1,6 +1,10 @@
 # TTT
 
-**TODO: Add description**
+## Starting the Game 
+  1. Make sure you have Elixir installed 
+  2. git clone the repo
+  2. navigate to the TTT_ELIXIR directory
+  3. run ```./ttt``` and then choose your game options from the menu..
 
 ## Installation
 
