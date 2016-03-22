@@ -1,27 +1,44 @@
 defmodule TTT.BoardDisplay do
-  alias TTT.Board
   def formatted_board(board) do
     board
+    |> format_elements
     |> format_board
     |> append_newline
   end
 
-  defp format_board(board) do
+  defp format_elements(board) do
     board
-    |> Board.rows
-    |> intersperse_column_divider
-    |> intersperse_row_divider
-    |> append_newline_to_row
+    |> Enum.with_index
+    |> Enum.map(fn({element, i}) -> format_element(element, i) end)
   end
 
-  defp intersperse_column_divider(board) do
-    Enum.map(board, fn(row) -> Enum.join(row, " | ") end)
+  defp format_element(element, index) do
+    if single_char?(element, index) do
+      " #{element}"
+    else
+     "#{element}"
+    end
   end
 
-  defp intersperse_row_divider(board), do: Enum.intersperse(board, "____________")
+  defp format_board([i1,  i2,  i3,  i4,
+                     i5,  i6,  i7,  i8,
+                     i9, i10, i11, i12,
+                     i13, i14, i15, i16]) do
+      "[ #{i1} ][ #{i2} ][ #{i3} ][ #{i4} ]\n" <>
+      "[ #{i5} ][ #{i6} ][ #{i7} ][ #{i8} ]\n" <>
+      "[ #{i9} ][ #{i10} ][ #{i11} ][ #{i12} ]\n" <>
+      "[ #{i13} ][ #{i14} ][ #{i15} ][ #{i16} ]"
+  end
+
+  defp format_board([i1, i2, i3,
+                     i4, i5, i6,
+                     i7, i8, i9]) do
+      "[ #{i1} ][ #{i2} ][ #{i3} ]\n" <>
+      "[ #{i4} ][ #{i5} ][ #{i6} ]\n" <>
+      "[ #{i7} ][ #{i8} ][ #{i9} ]"
+  end
 
   defp append_newline(message), do: message <> "\n"
 
-  defp append_newline_to_row(board), do: Enum.join(board, "\n")
-
+  defp single_char?(element, index), do: element == "X" || element == "O" || index < 9
 end
