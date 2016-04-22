@@ -1,7 +1,7 @@
 defmodule BoardResultTest do
   use ExUnit.Case
   doctest TTT
-  alias TTT.BoardResult
+  alias TTT.Board.BoardResult
 
   test "no winner found" do
     row1 = [1, 2, 3]

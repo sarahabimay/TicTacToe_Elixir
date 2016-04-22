@@ -1,6 +1,6 @@
-defmodule TTT.UnbeatablePlayer do
+defmodule TTT.Player.UnbeatablePlayer do
   alias TTT.Negamax
-  alias TTT.Board
+  alias TTT.Board.Board
 
   def next_move(board, _) do
     Negamax.negamax(remaining_spaces(board), board, -10000000, 10000000)[:best_move]

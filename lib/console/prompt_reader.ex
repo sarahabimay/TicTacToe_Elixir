@@ -1,6 +1,6 @@
-defmodule TTT.PromptReader do
-  alias TTT.OptionsDisplay
-  alias TTT.BoardPlay
+defmodule TTT.Console.PromptReader do
+  alias TTT.Console.OptionsDisplay
+  alias TTT.Board.BoardPlay
   alias TTT.Messages
   alias TTT.Options
 

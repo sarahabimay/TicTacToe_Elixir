@@ -1,9 +1,8 @@
 defmodule HumanPlayerTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
-  doctest TTT
-  alias TTT.HumanPlayer
-  alias TTT.Console
+  alias TTT.Player.HumanPlayer
+  alias TTT.Console.Console
 
   test "get next move from display" do
     next_move = "1"

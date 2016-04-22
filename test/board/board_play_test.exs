@@ -1,7 +1,7 @@
 defmodule BoardPlayTest do
   use ExUnit.Case
   doctest TTT
-  alias TTT.BoardPlay
+  alias TTT.Board.BoardPlay
 
   test "it sets an X mark in a position" do
     row1 = [1, 2, 3]

@@ -1,5 +1,5 @@
-defmodule TTT.PromptWriter do
-  alias TTT.BoardDisplay
+defmodule TTT.Console.PromptWriter do
+  alias TTT.Console.BoardDisplay
   alias TTT.Messages
 
   def display_board(board) do

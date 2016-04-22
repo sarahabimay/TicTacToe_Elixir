@@ -1,4 +1,4 @@
-defmodule TTT.OptionsDisplay do
+defmodule TTT.Console.OptionsDisplay do
   alias TTT.Options
 
   def board_size_options() do
