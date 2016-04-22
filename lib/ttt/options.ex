@@ -11,13 +11,9 @@ defmodule TTT.Options do
       5 => %{ "UVH" => "Unbeatable VS Human"}
    }
 
-  def board_size_options() do
-    option_labels(@board_sizes)
-  end
+  def board_size_options(), do: option_labels(@board_sizes)
 
-  def game_type_options() do
-    option_labels(@game_types)
-  end
+  def game_type_options(), do: option_labels(@game_types)
 
   def lookup_board_size(:invalid), do: :invalid
 

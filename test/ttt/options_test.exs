@@ -1,6 +1,5 @@
 defmodule OptionsTest do
   use ExUnit.Case
-  doctest TTT
   alias TTT.Options
 
   test "it has board size options" do

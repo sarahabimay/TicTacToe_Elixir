@@ -1,10 +1,9 @@
 defmodule PromptWriterTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
-  doctest TTT
-  alias TTT.PromptWriter
-  alias TTT.Board
-  alias TTT.BoardDisplay
+  alias TTT.Console.PromptWriter
+  alias TTT.Console.BoardDisplay
+  alias TTT.Board.Board
 
   test "it displays HVH game with 3x3 board" do
     dimension = 3

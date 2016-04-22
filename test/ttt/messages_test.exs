@@ -1,6 +1,5 @@
 defmodule MessagesTest do
   use ExUnit.Case
-  doctest TTT
   alias TTT.Messages
 
   test "mark X is embedded in the get new move message" do

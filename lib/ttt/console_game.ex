@@ -1,8 +1,8 @@
 defmodule TTT.ConsoleGame do
-  alias TTT.Board
-  alias TTT.BoardPlay
-  alias TTT.BoardResult
-  alias TTT.PlayerFactory
+  alias TTT.Board.Board
+  alias TTT.Board.BoardPlay
+  alias TTT.Board.BoardResult
+  alias TTT.Player.PlayerFactory
 
   def start_game(board, display) do
     display.clear_screen()
@@ -15,7 +15,7 @@ defmodule TTT.ConsoleGame do
 
   def play_game({board, display, [current_player | _] = players}) when is_list(board) do
     display.display_board(board)
-    new_board = play_turn_on_board(board, display, current_player)
+    new_board = play_move(board, display, current_player)
     _play_game(BoardResult.game_over?(new_board), new_board, display, Enum.reverse(players))
   end
 
@@ -25,21 +25,6 @@ defmodule TTT.ConsoleGame do
     display_result(board, display)
     restart_game(play_again?(display.play_again_option()), display)
   end
-
-  defp display_result(board, display) do
-    board
-    |> BoardResult.found_winner?
-    |> display.announce_result(board)
-  end
-
-  defp play_turn_on_board(board, display, player) do
-    board
-    |> player.next_move(display)
-    |> BoardPlay.play_move(board)
-  end
-
-  defp play_again?(choice) when choice == 1, do: true
-  defp play_again?(choice) when choice == 2, do: false
 
   defp game_setup(board, display) do
     new_board = choose_board(board, display)
@@ -56,4 +41,18 @@ defmodule TTT.ConsoleGame do
     display.request_game_type()
     |> PlayerFactory.select_players
   end
+  defp display_result(board, display) do
+    board
+    |> BoardResult.found_winner?
+    |> display.announce_result(board)
+  end
+
+  defp play_move(board, display, player) do
+    board
+    |> player.next_move(display)
+    |> BoardPlay.play_move(board)
+  end
+
+  defp play_again?(choice) when choice == 1, do: true
+  defp play_again?(choice) when choice == 2, do: false
 end

@@ -1,21 +1,25 @@
 defmodule ConsoleGameTest do
   use ExUnit.Case
-  doctest TTT
   import ExUnit.CaptureIO
+  alias TTT.Board.Board
+  alias TTT.Console.Console
   alias TTT.ConsoleGame
-  alias TTT.HumanPlayer
-  alias TTT.BeatablePlayer
+  alias TTT.Player.HumanPlayer
+  alias TTT.Player.BeatablePlayer
 
   defmodule FakeDisplay do
-    require Logger
     def display_board(_) do
       send self(), "board displayed"
     end
 
     def request_options(), do: [3, "HVH"]
+
     def request_board_size(), do: 3
+
     def request_game_type(), do: "HVH"
+
     def request_next_move(_), do: 7
+
     def play_again_option() do
       send self(), "Play Again: No"
       2
@@ -78,37 +82,24 @@ defmodule ConsoleGameTest do
     assert_received  "Game Over! The winner is: "
   end
 
-  test "player asked if they want to play again" do
-    row1 = ["X", "O", "X"]
-    row2 = ["O", "X", "O"]
-    row3 = [7, 8, 9]
-    board = row1 ++ row2 ++ row3
-    players = [HumanPlayer, HumanPlayer]
-    ConsoleGame.play_game({board, FakeDisplay, players})
-    assert_received "Play Again: No"
-  end
-
-  test "entire HVH game" do
-    game_type_choice = "1"
-    moves = "1\n2\n3\n4\n5\n6\n7"
-    play_again_no = "2"
-    expected_announcement =  "Game Over!"
-    result = capture_io([input: "#{game_type_choice}\n#{moves}\n#{play_again_no}\n"], fn ->
-      ConsoleGame.start_game(TTT.Board, TTT.Console)
-    end)
-    assert String.contains?(result, expected_announcement)
-  end
-
-  test "play two HVH games" do
+  test "play again is yes" do
+    board_size_choice = "1\n"
     game_type_choice = "1\n"
     moves = "1\n2\n3\n4\n5\n6\n7\n"
     play_again_yes = "1\n"
     play_again_no = "2\n"
-    expected_announcement =  "Game Over!"
-    input = game_type_choice <> moves <> play_again_yes <> moves <> play_again_no
-    result = capture_io([input: input], fn ->
-      ConsoleGame.start_game(TTT.Board, TTT.Console)
-    end)
+    expected_announcement = "Game Over!"
+    input =
+    board_size_choice <>
+    game_type_choice <>
+    moves <>
+    play_again_yes <>
+    board_size_choice <>
+    game_type_choice <>
+    moves <>
+    play_again_no
+
+    result = capture_io([input: input], fn -> ConsoleGame.start_game(Board, Console) end)
     assert String.contains?(result, expected_announcement)
   end
 end

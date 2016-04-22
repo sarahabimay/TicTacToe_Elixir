@@ -1,7 +1,7 @@
 defmodule TTT.Negamax do
-  alias TTT.Board
-  alias TTT.BoardPlay
-  alias TTT.BoardResult
+  alias TTT.Board.Board
+  alias TTT.Board.BoardPlay
+  alias TTT.Board.BoardResult
   @initial_score 10.0
   @initial_move -1
 

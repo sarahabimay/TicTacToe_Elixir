@@ -1,5 +1,5 @@
-defmodule TTT.BeatablePlayer do
-  alias TTT.Board
+defmodule TTT.Player.BeatablePlayer do
+  alias TTT.Board.Board
 
   def next_move(board, _) do
     available_positions = Board.available_positions(board)
@@ -15,17 +15,10 @@ defmodule TTT.BeatablePlayer do
     |> zero_indexed
   end
 
-  defp select_position(position, positions) do
-    Enum.at(positions, position)
-  end
+  defp select_position(position, positions), do: Enum.at(positions, position)
 
   defp random_number(1), do: 1
-  defp random_number(range) do
-    range
-    |> :random.uniform
-  end
+  defp random_number(range), do: :random.uniform(range)
 
-  defp zero_indexed(index) do
-    index - 1
-  end
+  defp zero_indexed(index), do: index - 1
 end

@@ -1,8 +1,8 @@
 defmodule BoardDisplayTest do
   use ExUnit.Case
   doctest TTT
-  alias TTT.Board
-  alias TTT.BoardDisplay
+  alias TTT.Board.Board
+  alias TTT.Console.BoardDisplay
 
   test "it displays HVH game with 3x3 board" do
     dimension = 3

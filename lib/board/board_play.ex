@@ -1,5 +1,5 @@
-defmodule TTT.BoardPlay do
-  alias TTT.Board
+defmodule TTT.Board.BoardPlay do
+  alias TTT.Board.Board
 
   def play_move(move, board) do
     mark = next_mark_to_play(board)

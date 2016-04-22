@@ -1,4 +1,4 @@
-defmodule TTT.BoardDisplay do
+defmodule TTT.Console.BoardDisplay do
   def formatted_board(board) do
     board
     |> format_elements

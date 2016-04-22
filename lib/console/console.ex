@@ -1,7 +1,7 @@
-defmodule TTT.Console do
-  alias TTT.PromptWriter
-  alias TTT.PromptReader
-  alias TTT.BoardResult
+defmodule TTT.Console.Console do
+  alias TTT.Console.PromptWriter
+  alias TTT.Console.PromptReader
+  alias TTT.Board.BoardResult
 
   def request_options(), do: [request_board_size(), request_game_type()]
 

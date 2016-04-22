@@ -1,7 +1,7 @@
 defmodule UnbeatablePlayerTest do
   use ExUnit.Case
-  doctest TTT
-  alias TTT.Console
+  alias TTT.Console.Console
+  alias TTT.Player.UnbeatablePlayer
 
   test "chooses last move" do
     next_move = 7
@@ -9,7 +9,7 @@ defmodule UnbeatablePlayerTest do
     row2 = ["X", "X", "O"]
     row3 = [ 7,  "X",  9]
     board = row1 ++ row2 ++ row3
-    assert TTT.UnbeatablePlayer.next_move(board, Console) == next_move
+    assert UnbeatablePlayer.next_move(board, Console) == next_move
   end
 
   test "chooses a blocking move" do
@@ -18,7 +18,7 @@ defmodule UnbeatablePlayerTest do
     row2 = [ 4,  "X" ,"X"]
     row3 = [ 7,   8,   9]
     board = row1 ++ row2 ++ row3
-    assert TTT.UnbeatablePlayer.next_move(board, Console) == next_move
+    assert UnbeatablePlayer.next_move(board, Console) == next_move
   end
 
   test "chooses blocking move" do
@@ -27,7 +27,7 @@ defmodule UnbeatablePlayerTest do
     row2 = [ 4,   5,   6]
     row3 = ["O", "X", "X"]
     board = row1 ++ row2 ++ row3
-    assert TTT.UnbeatablePlayer.next_move(board, Console) == next_move
+    assert UnbeatablePlayer.next_move(board, Console) == next_move
   end
 
   test "move on a 3x3 board with 1 occupied space" do
@@ -36,7 +36,7 @@ defmodule UnbeatablePlayerTest do
     row2 = [ 4, 5, 6]
     row3 = [ 7, 8, 9]
     board = row1 ++ row2 ++ row3
-    assert TTT.UnbeatablePlayer.next_move(board, Console) == next_move
+    assert UnbeatablePlayer.next_move(board, Console) == next_move
   end
 
   test "choose blocking move on 4x4 board" do
@@ -46,7 +46,7 @@ defmodule UnbeatablePlayerTest do
     row3 = ["O", "O", "X", "X"]
     row4 = [13,  14,  "O", "X"]
     board = row1 ++ row2 ++ row3 ++ row4
-    assert TTT.UnbeatablePlayer.next_move(board, Console) == next_move
+    assert UnbeatablePlayer.next_move(board, Console) == next_move
   end
 
   test "chooses move on 4x4 board with 3 places occupied" do
@@ -56,6 +56,6 @@ defmodule UnbeatablePlayerTest do
     row3 = [  9,  10,  11,  12]
     row4 = [ 13,  14,  "O", 16]
     board = row1 ++ row2 ++ row3 ++ row4
-    assert TTT.UnbeatablePlayer.next_move(board, Console) == next_move
+    assert UnbeatablePlayer.next_move(board, Console) == next_move
   end
 end

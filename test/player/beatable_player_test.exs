@@ -1,8 +1,7 @@
 defmodule BeatablePlayerTest do
   use ExUnit.Case
-  doctest TTT
-
-  alias TTT.Console
+  alias TTT.Console.Console
+  alias TTT.Player.BeatablePlayer
 
   test "get next move from display" do
     next_move = 8
@@ -10,6 +9,6 @@ defmodule BeatablePlayerTest do
     row2 = ["O", "X" ,"X"]
     row3 = ["O", 8, "O"]
     board = row1 ++ row2 ++ row3
-    assert TTT.BeatablePlayer.next_move(board, Console) == next_move
+    assert BeatablePlayer.next_move(board, Console) == next_move
   end
 end

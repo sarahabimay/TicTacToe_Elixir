@@ -1,8 +1,7 @@
 defmodule NegamaxTest do
   use ExUnit.Case
-  doctest TTT
   alias TTT.Negamax
-  alias TTT.Board
+  alias TTT.Board.Board
 
   @initial_alpha -1000000
   @initial_beta 1000000

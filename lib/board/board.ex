@@ -1,4 +1,4 @@
-defmodule TTT.Board do
+defmodule TTT.Board.Board do
   def empty_board(dimension) do
     Enum.to_list(1..dimension*dimension)
   end
