@@ -1,6 +1,5 @@
 defmodule BoardTest do
   use ExUnit.Case
-  doctest TTT
   alias TTT.Board.Board
 
   test "it returns an empty 3x3 board" do

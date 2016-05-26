@@ -1,6 +1,5 @@
 defmodule BoardDisplayTest do
   use ExUnit.Case
-  doctest TTT
   alias TTT.Board.Board
   alias TTT.Console.BoardDisplay
 

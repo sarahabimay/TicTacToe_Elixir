@@ -1,5 +1,8 @@
-defmodule TTT do
-  def main(_) do
+defmodule Mix.Tasks.Tictactoe do
+  use Mix.Task
+
+  def run(_args) do
     TTT.ConsoleGame.start_game(TTT.Board.Board, TTT.Console.Console)
   end
 end
+
